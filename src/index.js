@@ -23,26 +23,48 @@ class Game extends React.Component {
         this.state = {
             colors_id: [0],
             rgb_array : [[]],
+            true_color: '',
         };
-        this.get_random_color= this.get_random_color.bind(this);
-    }
 
-    get_random_color(id){
+        this.get_random_color= this.get_random_color.bind(this);
+        this.get_true_color= this.get_true_color.bind(this);
+        this.change_colors= this.change_colors.bind(this);
+
         var color =  arrayRandElement(colors_data)
         var numbers = get_numbers_from_text(color[1])
-        this.setState(previousState => ({
-            rgb_array: [...previousState.rgb_array, numbers],
-            colors_id:[...previousState.colors_id, previousState.colors_id[previousState.colors_id.length-1]+1]
-        }));
-       
+        this.state.rgb_array[0] = numbers;  
     }
 
+    get_random_color(){
+        var color =  arrayRandElement(colors_data)
+        var numbers = get_numbers_from_text(color[1])
+        return numbers;
+    }
+
+    change_colors(presed_color){
+        if(presed_color == this.state.true_color){
+            this.setState(previousState => ({
+                rgb_array: [...previousState.rgb_array, this.get_random_color()],
+                colors_id:[...previousState.colors_id, previousState.colors_id[previousState.colors_id.length-1]+1]
+            }));
+            this.setState(prevState => ({
+                rgb_array: prevState.rgb_array.map(
+                obj => (Object.assign(this.get_random_color() ))
+            )}));
+        }
+    }
+
+    get_true_color(){
+        this.state.true_color = arrayRandElement(this.state.colors_id);
+        console.log(this.state.true_color);
+    }
 
     colors_to_choice(){
+        this.get_true_color()
         return(
-            <div id="colors_to_choice" class="h-2/3 w-full absolute">
+            <div id="colors_to_choice" class="h-full w-full absolute">
                 <div id="colors" className="h-full w-full flex flex-row place-content-center" >
-                    {this.state.colors_id.map(color => <div key={color} onClick={()=>this.get_random_color(color)} id="color_color" class="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.rgb_array[color][0]+', '+this.state.rgb_array[color][1]+', '+this.state.rgb_array[color][2]+')', 'width':'100%'}}> </div>) }
+                    {this.state.colors_id.map(color => <div key={color} onClick={()=>this.change_colors(color)}  class="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.rgb_array[color][0]+', '+this.state.rgb_array[color][1]+', '+this.state.rgb_array[color][2]+')', 'width':'100%'}}> </div>) }
                 </div>
             </div>
         )
