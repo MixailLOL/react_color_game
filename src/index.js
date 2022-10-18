@@ -6,9 +6,12 @@ import reportWebVitals from './reportWebVitals';
 import {colors_data} from './colors.js'
 
 
-function get_numbers_from_text(str) {
-    let result = str.match(/(-?\d+(\.\d+)?)/g).map(v => +v);
-    return(result)
+function get_numbers_from_text(str) { 
+    console.log('Color come: ',str);
+    //var result = str.match(/(-?\d+(\.\d+)?)/g).map(v => +v); 
+    let result = str.toString().split(', ');
+    console.log(result)
+    return(result) 
 }
 
 function arrayRandElement(arr) {
@@ -32,13 +35,12 @@ class Game extends React.Component {
 
         var color =  this.get_random_color();
         this.state.color_array[0] = color; 
-
-        console.log('colors_id:', this.state.colors_id,';', 'color_array: ', this.state.color_array, ';', 'true_color: ', this.state.true_color) 
     }
 
     get_random_color(){
         var color =  arrayRandElement(colors_data)
-        var numbers = get_numbers_from_text(color[1])
+        console.log('Full color:', color)
+        var numbers = get_numbers_from_text(color[1].slice(4,color[1].length-2))
         color[1] = numbers
         return color;
     }
@@ -63,16 +65,40 @@ class Game extends React.Component {
 
     get_true_color(){
         this.state.true_color = arrayRandElement(this.state.color_array);
-        console.log(this.state.true_color);
     }
 
     colors_to_choice(){
-        console.log('colors_id:', this.state.colors_id,';', 'color_array: ', this.state.color_array, ';', 'true_color: ', this.state.true_color)
         this.get_true_color()
         return(
-            <div id="colors_to_choice" class="h-full w-full absolute">
-                <div id="colors" className="h-full w-full flex flex-row place-content-center" >
-                    {this.state.colors_id.map(color => <div key={color} onClick={()=>this.change_colors(this.state.color_array[color])}  class="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> </div>) }
+            <div className = "w-full h-screen select-none">
+                <div id="text_area" className=" w-full h-1/3 text-center text-4xl ">
+                    <div className="w-full h-1/3 relative ">
+                        <div className="absolute w-full h-full" >
+                            <div>
+                                <div>
+                                    <div id="viberi_color">
+                                    Найди цвет:
+                                    </div>
+                                    <div id="color_name">
+                                        {this.state.true_color[0]}
+                                    </div>
+                                    <div className="flex flex-row text-center place-content-center">
+                                        <div>
+                                            Очки:
+                                        </div>
+                                        <div id="good_answers_counter">
+                                            0
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="colors_to_choice" className="h-2/3 w-full absolute">
+                    <div id="colors" className="h-full w-full flex flex-row place-content-center" >
+                        {this.state.colors_id.map(color => <div key={color} onClick={()=>this.change_colors(this.state.color_array[color])}  className="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> </div>) }
+                    </div>
                 </div>
             </div>
         )
