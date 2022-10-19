@@ -16,17 +16,36 @@ function arrayRandElement(arr) {
     return arr[rand];
 }
 
+function change_bg_color(){
+    var new_color = [0,0,0];
+    let i;
+    console.log("color_array: ", this.state.color_array)
+    for( i=0; i < (this.state.color_array).length; i++){
+        var color_numbers = this.state.color_array[i][1];
+        new_color[0] += Number(color_numbers[0]);
+        new_color[1] += Number(color_numbers[1]);
+        new_color[2] += Number(color_numbers[2]);
+    }
+    console.log("new_color befor ", new_color);
+    new_color[0] = Math.round((new_color[0]/(this.state.color_array).length)*3.5);
+    new_color[1] = Math.round((new_color[1]/(this.state.color_array).length)*3.5);
+    new_color[2] = Math.round((new_color[2]/(this.state.color_array).length)*3.5);
+    console.log(new_color);
+    this.state.bg_color = new_color;
+    console.log("bg_color state: ",this.state.bg_color)
+}
+
+
 function colors_div_block(){
-    console.log('color_array:', this.state.color_array,'; true_color: ', this.state.true_color );
     return(
         <div className = "w-full h-screen select-none">
-            <div id="text_area" className=" w-full h-1/3 text-center text-4xl ">
-                <div className="w-full h-1/3 relative ">
-                    <div className="absolute w-full h-full" >
-                        <div>
-                            <div>
+            <div id="text_area" className=" w-full h-1/3 text-center text-4xl " style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')'}}>
+                <div className="w-full h-full relative ">
+                    <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
+                        <div style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                            <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
                                 <div id="viberi_color">
-                                Найди цвет:
+                                Выбери цвет:
                                 </div>
                                 <div id="color_name">
                                     {this.state.true_color[0]}
@@ -70,25 +89,23 @@ function points_div_block(){
 }
 
 function game_over_div_block(){
-    console.log('GAME OVER  color_array:', this.state.color_array,'; true_color: ', this.state.true_color );
-    console.log(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2] )
     return(
         <div className = "w-full h-screen select-none" onClick={()=>this.restart_game()}>
             <div id="answer_div" className="h-2/3 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%'}}>
                 <div className="flex flex-col h-full w-full text-center text-3xl">
                     <div className="w-full h-1/2 relative ">
-                        <div className="absolute w-full h-full">
-                            <div id="what_prsd_out_div">
-                                <div>
+                        <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
+                            <div id="what_prsd_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                                <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
                                     <div className="w-full h-1/2 "  id="what_pressed" >Вы выбрали: {this.state.presed_color[0]}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="w-full h-1/2 relative " style={{backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'width':'100%'}}>
-                        <div className="absolute w-full h-full">
-                            <div id="clr_to_prs_out_div">
-                                <div>
+                        <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
+                            <div id="clr_to_prs_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                                <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
                                     <div className="w-full h-1/2" id="color_to_press" >Искомый цвет: {this.state.true_color[0]}</div>
                                 </div>
                             </div>
@@ -98,13 +115,11 @@ function game_over_div_block(){
             </div>
 
             <div id="end_game" className=" w-full h-1/3 text-center text-4xl">
-                <div className="w-full h-1/3">
                     <div className="w-full h-full relative ">
-                        <div className="absolute w-full h-full">
-                            <div id="end_game_out_div">
-                                <div>
-                                    <div id="answ_count"></div>
-                                    <div id="btn_rstrt_div">
+                        <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
+                            <div id="end_game_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                                <div  style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                                    <div id="btn_rstrt_div" >
                                         <button id="btn_rstrs" onClick={()=>this.restart_game()}>
                                             <p>Всего очков: {this.state.points_count}</p> Начать занаво
                                         </button>
@@ -113,7 +128,6 @@ function game_over_div_block(){
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
     )
@@ -129,6 +143,7 @@ class Game extends React.Component {
             points_count: 0,
             game_state: 'game',
             presed_color: [],
+            bg_color:[]
         };
 
         this.get_random_color= this.get_random_color.bind(this);
@@ -138,9 +153,11 @@ class Game extends React.Component {
         colors_div_block= colors_div_block.bind(this);
         game_over_div_block= game_over_div_block.bind(this);
         points_div_block= points_div_block.bind(this);
+        change_bg_color= change_bg_color.bind(this);
 
         var color =  this.get_random_color();
         this.state.color_array[0] = color; 
+        change_bg_color();
     }
 
     get_random_color(){
@@ -152,7 +169,9 @@ class Game extends React.Component {
 
 
     check_answer(presed_color){
+        console.log("game_state: ",this.state.game_state);
         if(presed_color == this.state.true_color){
+            console.log('NOW i here')
             this.setState(previousState => ({
                 color_array: [...previousState.color_array, this.get_random_color()],
                 colors_id:[...previousState.colors_id, previousState.colors_id[previousState.colors_id.length-1]+1],
@@ -164,7 +183,7 @@ class Game extends React.Component {
                 obj => (Object.assign(this.get_random_color()))
             )}));
         }
-        else if(presed_color == 'next'){
+        else if(this.state.game_state == 'points_up'){
             this.setState({game_state: 'game'})
         }
         else{
@@ -197,6 +216,7 @@ class Game extends React.Component {
             )
         }
         this.set_true_color();
+        change_bg_color();
         return(
             colors_div_block()
         )
