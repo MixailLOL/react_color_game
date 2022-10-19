@@ -35,11 +35,19 @@ function change_bg_color(){
     console.log("bg_color state: ",this.state.bg_color)
 }
 
+/*function change_txt_color(){
+    bg_color = this.state.bg_color;
+    if(bg_color[0] + bg_color[1] + bg_color[2] > ((255*3)*0.59)){
+        this.state.text_color = 'rgb(0,0,0)';
+    }else{
+        this.state.text_color = 0;
+    }
+}*/
 
 function colors_div_block(){
     return(
-        <div className = "w-full h-screen select-none">
-            <div id="text_area" className=" w-full h-1/3 text-center text-4xl " style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')'}}>
+        <div className = "w-full h-screen select-none" style={{fontFamily: 'Roboto, sans-serif'}}>
+            <div id="text_area" className=" w-full h-1/3 text-center text-4xl " style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif'}}>
                 <div className="w-full h-full relative ">
                     <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                         <div style={{display: 'table-cell', verticalAlign: 'middle'}}>
@@ -74,7 +82,7 @@ function colors_div_block(){
 
 function points_div_block(){
     return(
-        <div id="good_aswer_div" className="w-full h-screen select-none text-center text-4xl relative" style={{backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'width':'100%'}} onClick={()=>this.check_answer('next')} >
+        <div id="good_aswer_div" className="w-full h-screen select-none text-center text-4xl relative" style={{backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'width':'100%', fontFamily: 'Roboto, sans-serif'}} onClick={()=>this.check_answer('next')} >
             <div className="w-full h-full relative ">
                 <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                     <div id="good_answer_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
@@ -85,12 +93,12 @@ function points_div_block(){
                 </div>
             </div>
         </div>
-        )
+    )
 }
 
 function game_over_div_block(){
     return(
-        <div className = "w-full h-screen select-none" onClick={()=>this.restart_game()}>
+        <div className = "w-full h-screen select-none" onClick={()=>this.restart_game()} style={{fontFamily: 'Roboto, sans-serif'}}>
             <div id="answer_div" className="h-2/3 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%'}}>
                 <div className="flex flex-col h-full w-full text-center text-3xl">
                     <div className="w-full h-1/2 relative ">
@@ -114,20 +122,18 @@ function game_over_div_block(){
                 </div>
             </div>
 
-            <div id="end_game" className=" w-full h-1/3 text-center text-4xl">
-                    <div className="w-full h-full relative ">
-                        <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
-                            <div id="end_game_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
-                                <div  style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                                    <div id="btn_rstrt_div" >
-                                        <button id="btn_rstrs" onClick={()=>this.restart_game()}>
-                                            <p>Всего очков: {this.state.points_count}</p> Начать занаво
-                                        </button>
-                                    </div>
+            <div id="end_game" className=" w-full h-1/3 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')'}}>
+                <div className="w-full h-full relative ">
+                    <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
+                        <div id="end_game_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                            <div  style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                                <div id="btn_rstrt_div" >
+                                        <p>Всего очков: {this.state.points_count}</p> Начать занаво
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     )
@@ -137,8 +143,8 @@ class Game extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            colors_id: [0],
-            color_array : [[]],
+            colors_id: [0,1],
+            color_array : [[],[]],
             true_color: [],
             points_count: 0,
             game_state: 'game',
@@ -155,8 +161,9 @@ class Game extends React.Component {
         points_div_block= points_div_block.bind(this);
         change_bg_color= change_bg_color.bind(this);
 
-        var color =  this.get_random_color();
-        this.state.color_array[0] = color; 
+        
+        this.state.color_array[0] = this.get_random_color(); 
+        this.state.color_array[1] = this.get_random_color(); 
         change_bg_color();
     }
 
@@ -187,9 +194,8 @@ class Game extends React.Component {
             this.setState({game_state: 'game'})
         }
         else{
-            var color =  this.get_random_color();
-            this.state.color_array[0] = color; 
-            this.setState({color_array: [color], colors_id:[0], points_count:0, game_state: 'loose', presed_color: presed_color});
+            var color =  this.get_random_color(); 
+            this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], points_count:0, game_state: 'loose', presed_color: presed_color});
         }
     }
 
@@ -199,9 +205,7 @@ class Game extends React.Component {
     }
 
     restart_game(){
-        this.setState({game_state: 'game'})
-        var color =  this.get_random_color();
-        this.state.color_array[0] = color;
+        this.setState({game_state: 'game'});
     }
 
     colors_to_choice(){
