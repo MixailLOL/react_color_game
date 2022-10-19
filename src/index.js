@@ -55,12 +55,12 @@ function colors_div_block(){
 
 function points_div_block(){
     return(
-        <div id="good_aswer_div" className="w-full h-full text-center text-4xl relative" >
+        <div id="good_aswer_div" className="w-full h-screen select-none text-center text-4xl relative" style={{backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'width':'100%'}} onClick={()=>this.check_answer('next')} >
             <div className="w-full h-full relative ">
-                <div className="absolute w-full h-full">
-                    <div id="good_answer_out_div">
-                        <div>
-                            <div id="good_aswer" class="w-full h-full "  >Отлично!\nОчки++\n{this.state.true_color[0]}</div>
+                <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
+                    <div id="good_answer_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                        <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                            <div id="good_aswer" className="w-full h-full "  ><p>Отлично!</p><p>Очки++</p><p>{this.state.true_color[0]}</p></div>
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@ function game_over_div_block(){
                         <div className="absolute w-full h-full">
                             <div id="what_prsd_out_div">
                                 <div>
-                                    <div className="w-full h-1/2 "  id="what_pressed" >Вы выбрали:</div>
+                                    <div className="w-full h-1/2 "  id="what_pressed" >Вы выбрали: {this.state.presed_color[0]}</div>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +89,7 @@ function game_over_div_block(){
                         <div className="absolute w-full h-full">
                             <div id="clr_to_prs_out_div">
                                 <div>
-                                    <div className="w-full h-1/2" id="color_to_press" >Искомый цвет:</div>
+                                    <div className="w-full h-1/2" id="color_to_press" >Искомый цвет: {this.state.true_color[0]}</div>
                                 </div>
                             </div>
                         </div>
@@ -106,7 +106,7 @@ function game_over_div_block(){
                                     <div id="answ_count"></div>
                                     <div id="btn_rstrt_div">
                                         <button id="btn_rstrs" onClick={()=>this.restart_game()}>
-                                            Начать занаво
+                                            <p>Всего очков: {this.state.points_count}</p> Начать занаво
                                         </button>
                                     </div>
                                 </div>
@@ -127,7 +127,7 @@ class Game extends React.Component {
             color_array : [[]],
             true_color: [],
             points_count: 0,
-            game_is_over: false,
+            game_state: 'game',
             presed_color: [],
         };
 
@@ -156,17 +156,21 @@ class Game extends React.Component {
             this.setState(previousState => ({
                 color_array: [...previousState.color_array, this.get_random_color()],
                 colors_id:[...previousState.colors_id, previousState.colors_id[previousState.colors_id.length-1]+1],
-                points_count: this.state.points_count + 1
+                points_count: this.state.points_count + 1,
+                game_state: 'points_up',
             }));
             this.setState(prevState => ({
                 color_array: prevState.color_array.map(
                 obj => (Object.assign(this.get_random_color()))
             )}));
         }
+        else if(presed_color == 'next'){
+            this.setState({game_state: 'game'})
+        }
         else{
             var color =  this.get_random_color();
             this.state.color_array[0] = color; 
-            this.setState({color_array: [color], colors_id:[0], points_count:0, game_is_over: true, presed_color: presed_color});
+            this.setState({color_array: [color], colors_id:[0], points_count:0, game_state: 'loose', presed_color: presed_color});
         }
     }
 
@@ -176,15 +180,20 @@ class Game extends React.Component {
     }
 
     restart_game(){
-        this.setState({game_is_over: false})
+        this.setState({game_state: 'game'})
         var color =  this.get_random_color();
         this.state.color_array[0] = color;
     }
 
     colors_to_choice(){
-        if(this.state.game_is_over){
+        if(this.state.game_state == 'loose'){
             return(
                  game_over_div_block()
+            )
+        }
+        else if(this.state.game_state == 'points_up'){
+            return(
+            points_div_block()
             )
         }
         this.set_true_color();
