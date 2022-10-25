@@ -1,9 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 import {colors_data} from './colors.js'
+import bridge from '@vkontakte/vk-bridge';
+
+
+
+
+bridge.send("VKWebAppInit").then( (data) => {console.log(data) });
+bridge.subscribe((e) => console.log("vkBridge event", e));
+bridge.send("VKWebAppAddToFavorites").then( (data) => {console.log(data) });
 
 
 function get_numbers_from_text(str) { 
@@ -19,21 +25,18 @@ function arrayRandElement(arr) {
 function change_bg_color(){
     var new_color = [0,0,0];
     let i;
-    console.log("color_array: ", this.state.color_array)
     for( i=0; i < (this.state.color_array).length; i++){
         var color_numbers = this.state.color_array[i][1];
         new_color[0] += Number(color_numbers[0]);
         new_color[1] += Number(color_numbers[1]);
         new_color[2] += Number(color_numbers[2]);
     }
-    console.log("new_color befor ", new_color);
     new_color[0] = Math.round((new_color[0]/(this.state.color_array).length)*3.5);
     new_color[1] = Math.round((new_color[1]/(this.state.color_array).length)*3.5);
     new_color[2] = Math.round((new_color[2]/(this.state.color_array).length)*3.5);
-    console.log(new_color);
     this.state.bg_color = new_color;
-    console.log("bg_color state: ",this.state.bg_color)
 }
+
 
 /*function change_txt_color(){
     bg_color = this.state.bg_color;
@@ -43,6 +46,7 @@ function change_bg_color(){
         this.state.text_color = 0;
     }
 }*/
+
 
 function colors_div_block(){
     return(
@@ -145,25 +149,26 @@ class Game extends React.Component {
         this.state = {
             colors_id: [0,1],
             color_array : [[],[]],
-            true_color: [],
+            true_color: '',
             points_count: 0,
             game_state: 'game',
             presed_color: [],
             bg_color:[]
         };
 
-        this.get_random_color= this.get_random_color.bind(this);
-        this.check_answer= this.check_answer.bind(this);
-        this.restart_game= this.restart_game.bind(this);
-        this.set_true_color= this.set_true_color.bind(this);
-        colors_div_block= colors_div_block.bind(this);
-        game_over_div_block= game_over_div_block.bind(this);
-        points_div_block= points_div_block.bind(this);
-        change_bg_color= change_bg_color.bind(this);
+        this.get_random_color = this.get_random_color.bind(this);
+        this.check_answer = this.check_answer.bind(this);
+        this.restart_game = this.restart_game.bind(this);
+        this.set_true_color = this.set_true_color.bind(this);
+        colors_div_block = colors_div_block.bind(this);
+        game_over_div_block = game_over_div_block.bind(this);
+        points_div_block = points_div_block.bind(this);
+        change_bg_color = change_bg_color.bind(this);
 
         
         this.state.color_array[0] = this.get_random_color(); 
         this.state.color_array[1] = this.get_random_color(); 
+        this.state.true_color = arrayRandElement(this.state.color_array);
         change_bg_color();
     }
 
@@ -176,9 +181,7 @@ class Game extends React.Component {
 
 
     check_answer(presed_color){
-        console.log("game_state: ",this.state.game_state);
-        if(presed_color == this.state.true_color){
-            console.log('NOW i here')
+        if(presed_color === this.state.true_color){
             this.setState(previousState => ({
                 color_array: [...previousState.color_array, this.get_random_color()],
                 colors_id:[...previousState.colors_id, previousState.colors_id[previousState.colors_id.length-1]+1],
@@ -190,37 +193,37 @@ class Game extends React.Component {
                 obj => (Object.assign(this.get_random_color()))
             )}));
         }
-        else if(this.state.game_state == 'points_up'){
-            this.setState({game_state: 'game'})
+        else if(this.state.game_state === 'points_up'){
+            this.set_true_color();
+            this.setState({game_state: 'game'});
         }
-        else{
-            var color =  this.get_random_color(); 
+        else{ 
             this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], points_count:0, game_state: 'loose', presed_color: presed_color});
         }
     }
 
     set_true_color(){
-        let true_color = arrayRandElement(this.state.color_array);
-        this.state.true_color =  true_color;
+        let color = arrayRandElement(this.state.color_array);
+        this.setState({true_color: color});
     }
 
     restart_game(){
+        this.set_true_color();
+        this.setState({game_state: 'game'});
         this.setState({game_state: 'game'});
     }
 
     colors_to_choice(){
-        if(this.state.game_state == 'loose'){
+        if(this.state.game_state === 'loose'){
             return(
                  game_over_div_block()
             )
         }
-        else if(this.state.game_state == 'points_up'){
+        else if(this.state.game_state === 'points_up'){
             return(
             points_div_block()
             )
         }
-        this.set_true_color();
-        change_bg_color();
         return(
             colors_div_block()
         )
