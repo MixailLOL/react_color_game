@@ -13,7 +13,7 @@ bridge.send("VKWebAppAddToFavorites").then( (data) => {console.log(data) });
 */
 
 function get_numbers_from_text(str) { 
-    let result = str.toString().split(', ');
+    var result = str.toString().split(', ');
     return(result) 
 }
 
@@ -179,7 +179,7 @@ class Game extends React.Component {
     get_random_color(){
         console.log('---------------');
         console.log(colors_data);
-        var color =  arrayRandElement(colors_data);
+        var color =  arrayRandElement(colors_data).slice(0);
         console.log('color: ', color);
         var numbers = get_numbers_from_text(color[1].slice(4,color[1].length-1));
         console.log('numbers', numbers);
