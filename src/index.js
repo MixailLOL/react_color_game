@@ -6,11 +6,10 @@ import bridge from '@vkontakte/vk-bridge';
 
 
 
-/*
+
 bridge.send("VKWebAppInit").then( (data) => {console.log(data) });
 bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppAddToFavorites").then( (data) => {console.log(data) });
-*/
+
 
 function get_numbers_from_text(str) { 
     var result = str.toString().split(', ');
@@ -42,10 +41,8 @@ function change_bg_color(){
 function change_txt_color(r,g,b){
     
     if(Number(r)+Number(g)+Number(b) > ((255*3)*0.69)){
-        console.log('black', r, g, b)
         return 'rgb(0,0,0)';
     }else{
-        console.log('white', r, g, b)
         return 'rgb(255,255,255)';
     }
     
@@ -106,8 +103,8 @@ function points_div_block(){
 
 function game_over_div_block(){
     return(
-        <div className = "w-full h-screen select-none" onClick={()=>this.restart_game()} style={{fontFamily: 'Roboto, sans-serif'}}>
-            <div id="answer_div" className="h-2/3 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
+        <div className = "w-full h-screen select-none"  style={{fontFamily: 'Roboto, sans-serif'}}>
+            <div id="answer_div" className="h-2/3 w-full" onClick={()=>this.restart_game()} style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
                 <div className="flex flex-col h-full w-full text-center text-3xl">
                     <div className="w-full h-1/2 relative ">
                         <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
@@ -143,8 +140,15 @@ function game_over_div_block(){
                     </div>
                 </div>
             </div>
+            <div onClick={()=>invite_friends()} className="w-full h-1/3">
+                
+            </div>
         </div>
     )
+}
+
+function invite_friends(){
+    bridge.send("VKWebAppShowInviteBox").then( (data) => {console.log(data) });
 }
 
 class Game extends React.Component {
@@ -238,9 +242,6 @@ class Game extends React.Component {
                 points_div_block()
             )
         }
-        console.log("this.state.bg_color: ",this.state.bg_color)
-        console.log("this.state.color_array: ",this.state.color_array)
-        console.log("this.state.colors_id: ",this.state.colors_id)
         change_bg_color();
         return(
             colors_div_block()
