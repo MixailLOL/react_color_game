@@ -213,7 +213,6 @@ class Game extends React.Component {
         else{ 
             this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], old_points_count: this.state.points_count, points_count:0, game_state: 'loose', presed_color: presed_color});
             if((this.state.play_try_count+1)%3 == 0){
-                bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
                 bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
                 .then(data => console.log(data.result))
                 .catch(error => console.log(error));
