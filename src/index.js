@@ -41,7 +41,7 @@ function change_bg_color(){
 
 function change_txt_color(r,g,b){
     
-    if(Number(r)+Number(g)+Number(b) > ((255*3)*0.59)){
+    if(Number(r)+Number(g)+Number(b) > ((255*3)*0.69)){
         console.log('black', r, g, b)
         return 'rgb(0,0,0)';
     }else{
@@ -136,7 +136,7 @@ function game_over_div_block(){
                         <div id="end_game_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
                             <div  style={{marginLeft: 'auto', marginRight: 'auto'}}>
                                 <div id="btn_rstrt_div" >
-                                        <p>Всего очков: {this.state.points_count}</p> Начать занаво
+                                        <p>Всего очков: {this.state.old_points_count}</p> Начать занаво
                                 </div>
                             </div>
                         </div>
@@ -157,7 +157,8 @@ class Game extends React.Component {
             points_count: 0,
             game_state: 'game',
             presed_color: [],
-            bg_color:[]
+            bg_color:[],
+            old_points_count: 0,
         };
 
         this.get_random_color = this.get_random_color.bind(this);
@@ -177,24 +178,28 @@ class Game extends React.Component {
     }
 
     get_random_color(){
-        console.log('---------------');
-        console.log(colors_data);
         var color =  arrayRandElement(colors_data).slice(0);
-        console.log('color: ', color);
         var numbers = get_numbers_from_text(color[1].slice(4,color[1].length-1));
-        console.log('numbers', numbers);
         color[1] = numbers;
-        console.log('color_exellent: ', color);
-        console.log('---------------');
         return color;
     }
 
 
     check_answer(presed_color){
-        if(presed_color === this.state.true_color){
+        if((presed_color === this.state.true_color) && ((this.state.points_count+1)%5==0)){
             this.setState(previousState => ({
                 color_array: [...previousState.color_array, this.get_random_color()],
                 colors_id:[...previousState.colors_id, previousState.colors_id[previousState.colors_id.length-1]+1],
+                points_count: this.state.points_count + 1,
+                game_state: 'points_up',
+            }));
+            this.setState(prevState => ({
+                color_array: prevState.color_array.map(
+                obj => (Object.assign(this.get_random_color()))
+            )}));
+        }
+        else if(presed_color === this.state.true_color){
+            this.setState(previousState => ({
                 points_count: this.state.points_count + 1,
                 game_state: 'points_up',
             }));
@@ -208,7 +213,7 @@ class Game extends React.Component {
             this.setState({game_state: 'game'});
         }
         else{ 
-            this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], points_count:0, game_state: 'loose', presed_color: presed_color});
+            this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], old_points_count: this.state.points_count, points_count:0, game_state: 'loose', presed_color: presed_color});
         }
     }
 
