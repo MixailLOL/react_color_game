@@ -5,6 +5,12 @@ import {colors_data} from './colors.js'
 import bridge from '@vkontakte/vk-bridge';
 
 
+
+
+bridge.send("VKWebAppInit").then( (data) => {console.log(data) });
+bridge.subscribe((e) => console.log("vkBridge event", e));
+
+
 function get_numbers_from_text(str) { 
     var result = str.toString().split(', ');
     return(result) 
@@ -150,6 +156,7 @@ class Game extends React.Component {
             presed_color: [],
             bg_color:[],
             old_points_count: 0,
+            play_try_count: 0,
         };
 
         this.get_random_color = this.get_random_color.bind(this);
@@ -201,10 +208,16 @@ class Game extends React.Component {
         }
         else if(this.state.game_state === 'points_up'){
             this.set_true_color();
-            this.setState({game_state: 'game'});
+            this.setState({game_state: 'game',  play_try_count: this.state.play_try_count+1});
         }
         else{ 
             this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], old_points_count: this.state.points_count, points_count:0, game_state: 'loose', presed_color: presed_color});
+            if((this.state.play_try_count+1)%3 == 0){
+                bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
+                bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+                .then(data => console.log(data.result))
+                .catch(error => console.log(error));
+            }
         }
     }
 
