@@ -6,11 +6,11 @@ import bridge from '@vkontakte/vk-bridge';
 
 
 
-
+/*
 bridge.send("VKWebAppInit").then( (data) => {console.log(data) });
 bridge.subscribe((e) => console.log("vkBridge event", e));
 bridge.send("VKWebAppAddToFavorites").then( (data) => {console.log(data) });
-
+*/
 
 function get_numbers_from_text(str) { 
     let result = str.toString().split(', ');
@@ -23,6 +23,7 @@ function arrayRandElement(arr) {
 }
 
 function change_bg_color(){
+
     var new_color = [0,0,0];
     let i;
     for( i=0; i < (this.state.color_array).length; i++){
@@ -31,31 +32,34 @@ function change_bg_color(){
         new_color[1] += Number(color_numbers[1]);
         new_color[2] += Number(color_numbers[2]);
     }
-    new_color[0] = Math.round((new_color[0]/(this.state.color_array).length)*3.5);
-    new_color[1] = Math.round((new_color[1]/(this.state.color_array).length)*3.5);
-    new_color[2] = Math.round((new_color[2]/(this.state.color_array).length)*3.5);
+    new_color[0] = Math.round(((new_color[0]/(this.state.color_array).length)*2));
+    new_color[1] = Math.round(((new_color[1]/(this.state.color_array).length)*2));
+    new_color[2] = Math.round(((new_color[2]/(this.state.color_array).length)*2));
     this.state.bg_color = new_color;
 }
 
 
-/*function change_txt_color(){
-    bg_color = this.state.bg_color;
-    if(bg_color[0] + bg_color[1] + bg_color[2] > ((255*3)*0.59)){
-        this.state.text_color = 'rgb(0,0,0)';
+function change_txt_color(r,g,b){
+    
+    if(Number(r)+Number(g)+Number(b) > ((255*3)*0.59)){
+        console.log('black', r, g, b)
+        return 'rgb(0,0,0)';
     }else{
-        this.state.text_color = 0;
+        console.log('white', r, g, b)
+        return 'rgb(255,255,255)';
     }
-}*/
+    
+}
 
 
 function colors_div_block(){
     return(
         <div className = "w-full h-screen select-none" style={{fontFamily: 'Roboto, sans-serif'}}>
-            <div id="text_area" className=" w-full h-1/3 text-center text-4xl " style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif'}}>
+            <div id="text_area" className=" w-full h-1/3 text-center text-4xl " style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
                 <div className="w-full h-full relative ">
                     <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                         <div style={{display: 'table-cell', verticalAlign: 'middle'}}>
-                            <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                            <div style={{marginLeft: 'auto', marginRight: 'auto'} }>
                                 <div id="viberi_color">
                                 Выбери цвет:
                                 </div>
@@ -86,7 +90,7 @@ function colors_div_block(){
 
 function points_div_block(){
     return(
-        <div id="good_aswer_div" className="w-full h-screen select-none text-center text-4xl relative" style={{backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'width':'100%', fontFamily: 'Roboto, sans-serif'}} onClick={()=>this.check_answer('next')} >
+        <div id="good_aswer_div" className="w-full h-screen select-none text-center text-4xl relative" style={{backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'width':'100%', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}} onClick={()=>this.check_answer('next')} >
             <div className="w-full h-full relative ">
                 <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                     <div id="good_answer_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
@@ -103,7 +107,7 @@ function points_div_block(){
 function game_over_div_block(){
     return(
         <div className = "w-full h-screen select-none" onClick={()=>this.restart_game()} style={{fontFamily: 'Roboto, sans-serif'}}>
-            <div id="answer_div" className="h-2/3 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%'}}>
+            <div id="answer_div" className="h-2/3 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
                 <div className="flex flex-col h-full w-full text-center text-3xl">
                     <div className="w-full h-1/2 relative ">
                         <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
@@ -114,7 +118,7 @@ function game_over_div_block(){
                             </div>
                         </div>
                     </div>
-                    <div className="w-full h-1/2 relative " style={{backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'width':'100%'}}>
+                    <div className="w-full h-1/2 relative " style={{backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
                         <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                             <div id="clr_to_prs_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
                                 <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
@@ -126,7 +130,7 @@ function game_over_div_block(){
                 </div>
             </div>
 
-            <div id="end_game" className=" w-full h-1/3 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')'}}>
+            <div id="end_game" className=" w-full h-1/3 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
                 <div className="w-full h-full relative ">
                     <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                         <div id="end_game_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
@@ -173,9 +177,15 @@ class Game extends React.Component {
     }
 
     get_random_color(){
+        console.log('---------------');
+        console.log(colors_data);
         var color =  arrayRandElement(colors_data);
+        console.log('color: ', color);
         var numbers = get_numbers_from_text(color[1].slice(4,color[1].length-1));
+        console.log('numbers', numbers);
         color[1] = numbers;
+        console.log('color_exellent: ', color);
+        console.log('---------------');
         return color;
     }
 
@@ -210,7 +220,6 @@ class Game extends React.Component {
     restart_game(){
         this.set_true_color();
         this.setState({game_state: 'game'});
-        this.setState({game_state: 'game'});
     }
 
     colors_to_choice(){
@@ -221,9 +230,13 @@ class Game extends React.Component {
         }
         else if(this.state.game_state === 'points_up'){
             return(
-            points_div_block()
+                points_div_block()
             )
         }
+        console.log("this.state.bg_color: ",this.state.bg_color)
+        console.log("this.state.color_array: ",this.state.color_array)
+        console.log("this.state.colors_id: ",this.state.colors_id)
+        change_bg_color();
         return(
             colors_div_block()
         )
