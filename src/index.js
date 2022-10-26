@@ -148,6 +148,7 @@ function game_over_div_block(){
 }
 
 function invite_friends(){
+    console.log("Good")
     bridge.send("VKWebAppShowInviteBox").then( (data) => {console.log(data) });
 }
 
