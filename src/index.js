@@ -104,7 +104,7 @@ function points_div_block(){
 function game_over_div_block(){
     return(
         <div className = "w-full h-screen select-none"  style={{fontFamily: 'Roboto, sans-serif' }} >
-            <div id="answer_div" className="h-2/3 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
+            <div id="answer_div" className="h-2/6 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
                 <div className="flex flex-col h-full w-full text-center text-3xl">
                     <div className="w-full h-1/2 relative ">
                         <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
@@ -127,16 +127,20 @@ function game_over_div_block(){
                 </div>
             </div>
 
-            <div id="end_game" className=" w-full h-1/3 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
+            <div id="end_game" className=" w-full h-4/6 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
                 <div className="w-full h-full relative ">
                     <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                         <div id="end_game_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
                             <div  style={{marginLeft: 'auto', marginRight: 'auto'}}>
                                 <div id="btn_rstrt_div" >
-                                        <p>Всего очков: {this.state.old_points_count}</p> <p onClick={()=>this.restart_game()}>Начать занаво</p>
-                                        <p onClick={()=>adTo_favorite_game()}>Добавить игру в избранные</p>
+                                        <p>Очки: {this.state.old_points_count}</p> <p onClick={()=>this.restart_game()}>Начать занаво</p>
+                                        <p>Рекорд: {this.state.local_best_score}</p>
                                 </div>
                             </div>
+                            <div className=" bottom-0"><p onClick={()=>adTo_favorite_game()}>1</p></div>
+                            <div className=" bottom-0"><p onClick={()=>adTo_favorite_game2()}>2</p></div>
+                            <div className=" bottom-0"><p onClick={()=>adTo_favorite_game3()}>3</p></div>
+                            <div className=" bottom-0"><p onClick={()=>adTo_favorite_game4()}>4</p></div>
                         </div>
                     </div>
                 </div>
@@ -147,10 +151,40 @@ function game_over_div_block(){
 
 
 function adTo_favorite_game(){
-    bridge.send('VKWebAppAddToFavorites')
+   bridge.send('VKWebAppShare', {
+  link: 'https://vk.com/app51394304'
+  })
   .then((data) => { 
     if (data.result) {
-      // Мини-приложение или игра добавлены в избранное
+      // Запись размещена
+    }
+  })
+  .catch((error) => {
+    // Ошибка
+    console.log(error);
+  });
+}
+
+function adTo_favorite_game4(){
+   bridge.send("VKWebAppShowLeaderBoardBox", {user_result:100})
+         .then(data => console.log(data.success))  
+        .catch(error => console.log(error));
+}
+
+function adTo_favorite_game3(){
+   bridge.send("VKWebAppShowInviteBox", {})
+         .then(data => console.log(data.success))  
+        .catch(error => console.log(error));
+}
+
+function adTo_favorite_game2(){
+  bridge.send('VKWebAppShowWallPostBox', {
+  message: 'Hello!',
+  attachments: 'https://habr.com'
+  })
+  .then((data) => { 
+    if (data.post_id) {
+      // Запись размещена
     }
   })
   .catch((error) => {
@@ -172,6 +206,7 @@ class Game extends React.Component {
             bg_color:[],
             old_points_count: 0,
             play_try_count: 0,
+            local_best_score: 0,
         };
 
         this.get_random_color = this.get_random_color.bind(this);
@@ -182,6 +217,7 @@ class Game extends React.Component {
         game_over_div_block = game_over_div_block.bind(this);
         points_div_block = points_div_block.bind(this);
         change_bg_color = change_bg_color.bind(this);
+        adTo_favorite_game = adTo_favorite_game.bind(this);
 
         
         this.state.color_array[0] = this.get_random_color(); 
@@ -226,6 +262,9 @@ class Game extends React.Component {
             this.setState({game_state: 'game'});
         }
         else{ 
+            if(this.state.points_count > this.state.local_best_score){
+                this.state.local_best_score = this.state.points_count;
+            }
             this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], old_points_count: this.state.points_count, points_count:0, game_state: 'loose', presed_color: presed_color,  play_try_count: this.state.play_try_count+1});
             console.log('PLAY try count: ', this.state.play_try_count);
             if(((this.state.play_try_count)%3 == 0) && (this.state.play_try_count != 0)){
