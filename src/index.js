@@ -180,7 +180,7 @@ function invite_to_game(){
 
 function post_to_wall(){
   bridge.send('VKWebAppShowWallPostBox', {
-  message: 'Знаешь сколько я угадал цветов? Целых '+Str(this.state.local_best_score),
+  message: 'Знаешь сколько я угадал цветов? Целых '+String(this.state.local_best_score),
   attachments: 'https://vk.com/app51394304'
   })
   .then((data) => { 
