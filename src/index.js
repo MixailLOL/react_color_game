@@ -137,20 +137,21 @@ function game_over_div_block(){
                                         <p>Рекорд: {this.state.local_best_score}</p>
                                 </div>
                             </div>
-                            <div className=" bottom-0"><p onClick={()=>adTo_favorite_game()}>1</p></div>
-                            <div className=" bottom-0"><p onClick={()=>adTo_favorite_game2()}>2</p></div>
-                            <div className=" bottom-0"><p onClick={()=>adTo_favorite_game3()}>3</p></div>
-                            <div className=" bottom-0"><p onClick={()=>adTo_favorite_game4()}>4</p></div>
+                            <div className=" bottom-0"><p onClick={()=>app_share()}>Поделиться игрой</p></div>
+                            <div className=" bottom-0"><p onClick={()=>post_to_wall()}>Поделиться результатом</p></div>
+                            <div className=" bottom-0"><p onClick={()=>invite_to_game()}>Пригласить друга</p></div>
+                            <div className=" bottom-0"><p onClick={()=>leader_board_box()}>Таблица лидеров</p></div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     )
 }
 
 
-function adTo_favorite_game(){
+function app_share(){
    bridge.send('VKWebAppShare', {
   link: 'https://vk.com/app51394304'
   })
@@ -165,22 +166,22 @@ function adTo_favorite_game(){
   });
 }
 
-function adTo_favorite_game4(){
-   bridge.send("VKWebAppShowLeaderBoardBox", {user_result:100})
+function leader_board_box(){
+   bridge.send("VKWebAppShowLeaderBoardBox", {user_result:this.state.local_best_score})
          .then(data => console.log(data.success))  
         .catch(error => console.log(error));
 }
 
-function adTo_favorite_game3(){
+function invite_to_game(){
    bridge.send("VKWebAppShowInviteBox", {})
          .then(data => console.log(data.success))  
         .catch(error => console.log(error));
 }
 
-function adTo_favorite_game2(){
+function post_to_wall(){
   bridge.send('VKWebAppShowWallPostBox', {
-  message: 'Hello!',
-  attachments: 'https://habr.com'
+  message: 'Знаешь сколько я угадал цветов? Целых '+Str(this.state.local_best_score),
+  attachments: 'https://vk.com/app51394304'
   })
   .then((data) => { 
     if (data.post_id) {
@@ -217,8 +218,8 @@ class Game extends React.Component {
         game_over_div_block = game_over_div_block.bind(this);
         points_div_block = points_div_block.bind(this);
         change_bg_color = change_bg_color.bind(this);
-        adTo_favorite_game = adTo_favorite_game.bind(this);
-
+        leader_board_box = leader_board_box.bind(this);
+        post_to_wall = post_to_wall.bind(this);
         
         this.state.color_array[0] = this.get_random_color(); 
         this.state.color_array[1] = this.get_random_color(); 
