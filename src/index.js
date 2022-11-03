@@ -24,6 +24,7 @@ function arrayRandElement(arr) {
 function change_bg_color(){
 
     var new_color = [0,0,0];
+    var new_btn_clr = [0,0,0];
     let i;
     for( i=0; i < (this.state.color_array).length; i++){
         var color_numbers = this.state.color_array[i][1];
@@ -104,7 +105,7 @@ function points_div_block(){
 function game_over_div_block(){
     return(
         <div className = "w-full h-screen select-none"  style={{fontFamily: 'Roboto, sans-serif' }} >
-            <div id="answer_div" className="h-2/6 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
+            <div id="answer_div" className="h-3/6 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
                 <div className="flex flex-col h-full w-full text-center text-3xl">
                     <div className="w-full h-1/2 relative ">
                         <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
@@ -127,22 +128,32 @@ function game_over_div_block(){
                 </div>
             </div>
 
-            <div id="end_game" className=" w-full h-4/6 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
+            <div id="end_game" className=" w-full h-3/6 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
                 <div className="w-full h-full relative ">
                     <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
-                        <div id="end_game_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
-                            <div  style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                                <div id="btn_rstrt_div" >
-                                        <p>Очки: {this.state.old_points_count}</p> <p onClick={()=>this.restart_game()}>Начать занаво</p>
+                        <div id="end_game_out_div" className="h-1/3">
+                            <div  className="h-full" style={{marginLeft: 'auto', marginRight: 'auto', fontWeight:'bold'}}>
+                                <div className="h-full" id="btn_rstrt_div" className="h-full" >
+                                    <div className="mt-4">
+                                        <p>Очки: {this.state.old_points_count}</p>
+                                    </div>
+                                    <div >
                                         <p>Рекорд: {this.state.local_best_score}</p>
+                                    </div>
+                                    <div onClick={()=>this.restart_game()} className="mt-4 text-center" style={{ backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
+                                        Начать занаво
+                                    </div>
                                 </div>
                             </div>
-                            <div className=" bottom-0"><p onClick={()=>app_share()}>Поделиться игрой</p></div>
-                            <div className=" bottom-0"><p onClick={()=>post_to_wall()}>Поделиться результатом</p></div>
-                            <div className=" bottom-0"><p onClick={()=>invite_to_game()}>Пригласить друга</p></div>
-                            <div className=" bottom-0"><p onClick={()=>leader_board_box()}>Таблица лидеров</p></div>
+                            
                         </div>
                     </div>
+                    <div className="text-bottom text-2xl absolute w-full" style={{bottom: '0', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
+                                <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="my-2 bottom-0"><p onClick={()=>post_to_wall()}>Поделиться результатом</p></div>
+                                <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="my-2 bottom-0"><p onClick={()=>app_share()}>Поделиться игрой</p></div>
+                                <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="my-2 bottom-0"><p onClick={()=>invite_to_game()}>Пригласить друга</p></div>
+                                <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}}className="my-2 bottom-0"><p onClick={()=>leader_board_box()}>Таблица лидеров</p></div>
+                        </div>
                 </div>
             </div>
 
