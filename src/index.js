@@ -130,8 +130,8 @@ function game_over_div_block(){
 
             <div id="end_game" className=" w-full h-1/2 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
                 <div className="w-full h-full relative ">
-                    <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
-                        <div id="end_game_out_div" className="h-2/3">
+                    <div className="absolute w-full h-1/2" style={{display: 'table',  top: '0', left: '0'}}>
+                        <div id="end_game_out_div" className="h-full">
                             <div  className="h-full" style={{marginLeft: 'auto', marginRight: 'auto', fontWeight:'bold'}}>
                                 <div className="h-full" id="btn_rstrt_div">
                                     <div  className=" mt-4">
@@ -141,7 +141,7 @@ function game_over_div_block(){
                                         <p>Рекорд: {this.state.local_best_score}</p>
                                     </div>
                                     <div onClick={()=>this.restart_game()} className="w-full h-1/3" style={{display: 'table',  top: '0', left: '0', backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
-                                        <div  className="mt-4 w-full text-center h-2/4" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                                        <div  className="mt-4 w-full text-center h-1/2" style={{display: 'table-cell', verticalAlign: 'middle'}}>
                                             <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
                                                 <div className="w-full h-1/2" >Начать занаво</div>
                                             </div>
@@ -152,11 +152,13 @@ function game_over_div_block(){
                             
                         </div>
                     </div>
-                    <div className="text-bottom text-2xl absolute w-full" style={{bottom: '0', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
-                                <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="my-2 bottom-0"><p onClick={()=>post_to_wall()}>Поделиться результатом</p></div>
-                                <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="my-2 bottom-0"><p onClick={()=>app_share()}>Поделиться игрой</p></div>
-                                <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="my-2 bottom-0"><p onClick={()=>invite_to_game()}>Пригласить друга</p></div>
-                        </div>
+                    <div className="text-bottom h-1/2 text-2xl absolute w-full" style={{bottom: '0', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
+                        <div style={{bottom: '0px'}} className="absolute w-full">
+                            <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="mt-2 bottom-0"><p onClick={()=>post_to_wall()}>Поделиться результатом</p></div>
+                                <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="mt-2 bottom-0"><p onClick={()=>app_share()}>Поделиться игрой</p></div>
+                                <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="mt-2 bottom-0"><p onClick={()=>invite_to_game()}>Пригласить друга</p></div>
+                        </div> 
+                    </div>
                 </div>
             </div>
 
