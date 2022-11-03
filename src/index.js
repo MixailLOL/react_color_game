@@ -105,7 +105,7 @@ function points_div_block(){
 function game_over_div_block(){
     return(
         <div className = "w-full h-screen select-none"  style={{fontFamily: 'Roboto, sans-serif' }} >
-            <div id="answer_div" className="h-3/5 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
+            <div id="answer_div" className="h-1/2 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
                 <div className="flex flex-col h-full w-full text-center text-3xl">
                     <div className="w-full h-1/2 relative ">
                         <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
@@ -128,20 +128,24 @@ function game_over_div_block(){
                 </div>
             </div>
 
-            <div id="end_game" className=" w-full h-2/5 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
+            <div id="end_game" className=" w-full h-1/2 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
                 <div className="w-full h-full relative ">
                     <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
-                        <div id="end_game_out_div" className="h-1/3">
+                        <div id="end_game_out_div" className="h-2/3">
                             <div  className="h-full" style={{marginLeft: 'auto', marginRight: 'auto', fontWeight:'bold'}}>
-                                <div className="h-full" id="btn_rstrt_div" className="h-full" >
-                                    <div className="mt-4">
+                                <div className="h-full" id="btn_rstrt_div">
+                                    <div  className=" mt-4">
                                         <p>Очки: {this.state.old_points_count}</p>
                                     </div>
-                                    <div >
+                                    <div className="my-2">
                                         <p>Рекорд: {this.state.local_best_score}</p>
                                     </div>
-                                    <div onClick={()=>this.restart_game()} className="mt-4 text-center" style={{ backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
-                                        Начать занаво
+                                    <div onClick={()=>this.restart_game()} className="w-full h-1/3" style={{display: 'table',  top: '0', left: '0', backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
+                                        <div  className="mt-4 w-full text-center h-2/4" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                                            <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                                                <div className="w-full h-1/2" >Начать занаво</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
