@@ -105,7 +105,7 @@ function points_div_block(){
 function game_over_div_block(){
     return(
         <div className = "w-full h-screen select-none"  style={{fontFamily: 'Roboto, sans-serif' }} >
-            <div id="answer_div" className="h-3/6 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
+            <div id="answer_div" className="h-3/5 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
                 <div className="flex flex-col h-full w-full text-center text-3xl">
                     <div className="w-full h-1/2 relative ">
                         <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
@@ -128,7 +128,7 @@ function game_over_div_block(){
                 </div>
             </div>
 
-            <div id="end_game" className=" w-full h-3/6 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
+            <div id="end_game" className=" w-full h-2/5 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
                 <div className="w-full h-full relative ">
                     <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                         <div id="end_game_out_div" className="h-1/3">
@@ -152,7 +152,6 @@ function game_over_div_block(){
                                 <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="my-2 bottom-0"><p onClick={()=>post_to_wall()}>Поделиться результатом</p></div>
                                 <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="my-2 bottom-0"><p onClick={()=>app_share()}>Поделиться игрой</p></div>
                                 <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="my-2 bottom-0"><p onClick={()=>invite_to_game()}>Пригласить друга</p></div>
-                                <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}}className="my-2 bottom-0"><p onClick={()=>leader_board_box()}>Таблица лидеров</p></div>
                         </div>
                 </div>
             </div>
