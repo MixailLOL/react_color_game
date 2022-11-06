@@ -222,7 +222,7 @@ class Game extends React.Component {
             presed_color: [],
             bg_color:[],
             old_points_count: 0,
-            play_try_count: 0,
+            play_try_count: 1,
             local_best_score: 0,
         };
 
