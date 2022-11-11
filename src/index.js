@@ -78,7 +78,7 @@ function colors_div_block(){
                 </div>
             </div>
             <div id="colors_to_choice" className="h-2/3 w-full absolute">
-                <motion.div  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} id="colors" className="h-full w-full flex flex-row place-content-center" >
+                <motion.div id="colors" className="h-full w-full flex flex-row place-content-center" >
                     {this.state.colors_id.map(color => <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.9 }} key={color} onClick={()=>this.check_answer(this.state.color_array[color])}  className="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> </motion.div>) }
                 </motion.div>
             </div>
@@ -140,13 +140,16 @@ function game_over_div_block(){
                                     <div className="my-2">
                                         <p>Рекорд: {this.state.local_best_score}</p>
                                     </div>
-                                    <div onClick={()=>this.restart_game()} className="w-full h-1/3" style={{display: 'table',  top: '0', left: '0', backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
-                                        <div  className="mt-4 w-full text-center h-1/2" style={{display: 'table-cell', verticalAlign: 'middle'}}>
-                                            <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                                                <div className="w-full h-1/2" >Начать занаво</div>
+                                    <div className="h-1/3 w-full">
+                                        <div onClick={()=>this.restart_game()} className="h-full px-5"  style={{ borderRadius: '20px',margin: "0 auto", display: 'table',  top: '0', left: '0', backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
+                                            <div  className="mt-4 w-full text-center h-1/2" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                                                <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                                                    <div className="h-1/2" >Начать занаво</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                             
@@ -154,9 +157,24 @@ function game_over_div_block(){
                     </div>
                     <div className="text-bottom h-1/2 text-2xl absolute w-full" style={{bottom: '0', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
                         <div style={{bottom: '0px'}} className="absolute w-full">
-                            <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="mt-2 bottom-0"><p onClick={()=>post_to_wall()}>Поделиться результатом</p></div>
-                                <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="mt-2 bottom-0"><p onClick={()=>app_share()}>Поделиться игрой</p></div>
-                                <div style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'}} className="mt-2 bottom-0"><p onClick={()=>invite_to_game()}>Пригласить друга</p></div>
+
+                            <div className="text-center py-2" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
+                                <div className="px-5" onClick={()=>post_to_wall()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
+                                    <div > Поделиться результатом</div>   
+                                </div>
+                            </div>
+
+                            <div className="text-center py-2" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
+                                <div className="px-5" onClick={()=>app_share()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
+                                    <div > Поделиться игрой</div>   
+                                </div>
+                            </div>
+
+                            <div className="text-center py-2" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
+                                <div className="px-5" onClick={()=>invite_to_game()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
+                                    <div > Пригласить друга</div>   
+                                </div>
+                            </div>
                         </div> 
                     </div>
                 </div>
