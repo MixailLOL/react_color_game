@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import {colors_data} from './colors.js'
 import bridge from '@vkontakte/vk-bridge';
-
+import { motion } from "framer-motion"
 
 
 
@@ -52,8 +52,8 @@ function change_txt_color(r,g,b){
 
 function colors_div_block(){
     return(
-        <div className = "w-full h-screen select-none" style={{fontFamily: 'Roboto, sans-serif'}}>
-            <div id="text_area" className=" w-full h-1/3 text-center text-4xl " style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
+        <div className = "w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
+            <div id="text_area" className=" w-full h-1/3 text-center text-4xl " >
                 <div className="w-full h-full relative ">
                     <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                         <div style={{display: 'table-cell', verticalAlign: 'middle'}}>
@@ -78,9 +78,9 @@ function colors_div_block(){
                 </div>
             </div>
             <div id="colors_to_choice" className="h-2/3 w-full absolute">
-                <div id="colors" className="h-full w-full flex flex-row place-content-center" >
-                    {this.state.colors_id.map(color => <div key={color} onClick={()=>this.check_answer(this.state.color_array[color])}  className="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> </div>) }
-                </div>
+                <motion.div  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} id="colors" className="h-full w-full flex flex-row place-content-center" >
+                    {this.state.colors_id.map(color => <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} key={color} onClick={()=>this.check_answer(this.state.color_array[color])}  className="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> </motion.div>) }
+                </motion.div>
             </div>
         </div>
     )
