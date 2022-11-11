@@ -79,7 +79,7 @@ function colors_div_block(){
             </div>
             <div id="colors_to_choice" className="h-2/3 w-full absolute">
                 <motion.div  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} id="colors" className="h-full w-full flex flex-row place-content-center" >
-                    {this.state.colors_id.map(color => <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} key={color} onClick={()=>this.check_answer(this.state.color_array[color])}  className="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> </motion.div>) }
+                    {this.state.colors_id.map(color => <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.9 }} key={color} onClick={()=>this.check_answer(this.state.color_array[color])}  className="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> </motion.div>) }
                 </motion.div>
             </div>
         </div>
@@ -93,7 +93,7 @@ function points_div_block(){
                 <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                     <div id="good_answer_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
                         <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                            <div id="good_aswer" className="w-full h-full "  ><p>Отлично!</p><p>Очки++</p><p>{this.state.true_color[0]}</p></div>
+                            <motion.div transition={{duration: 0.8, delay: 0.1, ease: [0, 0.71, 0.2, 1.01]}} initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} id="good_aswer" className="w-full h-full "  ><p>Отлично!</p><p>Очки++</p><p>{this.state.true_color[0]}</p></motion.div>
                         </div>
                     </div>
                 </div>
