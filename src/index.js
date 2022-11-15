@@ -158,23 +158,23 @@ function game_over_div_block(){
                     <div className="text-bottom h-1/2 text-2xl absolute w-full" style={{bottom: '0', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
                         <div style={{bottom: '0px'}} className="absolute w-full">
 
-                            <div className="text-center py-2" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
-                                <div className="px-5" onClick={()=>post_to_wall()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
-                                    <div > Поделиться результатом</div>   
+                            <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
+                                <div className="px-5 py-1" onClick={()=>post_to_wall()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
+                                    <motion.div > Поделиться результатом</motion.div>   
                                 </div>
-                            </div>
+                            </motion.div>
 
-                            <div className="text-center py-2" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
-                                <div className="px-5" onClick={()=>app_share()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
+                            <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [-400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
+                                <div className="px-5 py-1" onClick={()=>app_share()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
                                     <div > Поделиться игрой</div>   
                                 </div>
-                            </div>
+                            </motion.div>
 
-                            <div className="text-center py-2" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
-                                <div className="px-5" onClick={()=>invite_to_game()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
+                            <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
+                                <div className="px-5 py-1" onClick={()=>invite_to_game()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
                                     <div > Пригласить друга</div>   
                                 </div>
-                            </div>
+                            </motion.div>
                         </div> 
                     </div>
                 </div>
