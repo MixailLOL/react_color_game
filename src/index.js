@@ -341,6 +341,6 @@ class Game extends React.Component {
         return(this.colors_to_choice())
     }
 }
-
+document.body.style.overflow = "hidden";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<Game />);
