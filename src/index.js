@@ -122,7 +122,7 @@ function colors_div_block(){
     return(
         <div className = "w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
             <div  id='text_area_lol' className=" w-full h-1/3 text-center text-4xl " > 
-            <Particles color={[this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2]]} id = {document.getElementById('text_area_lol')}/>
+            
                 <div className="w-full h-full relative ">
                     <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                         <div style={{display: 'table-cell', verticalAlign: 'middle'}}>
