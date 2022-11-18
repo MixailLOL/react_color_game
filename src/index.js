@@ -4,11 +4,80 @@ import './index.css';
 import {colors_data} from './colors.js'
 import bridge from '@vkontakte/vk-bridge';
 import { motion } from "framer-motion"
-
+import { useState, useEffect, useRef } from 'react';
 
 
 bridge.send("VKWebAppInit").then( (data) => {console.log(data) });
 bridge.subscribe((e) => console.log("vkBridge event", e));
+
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height
+  };
+}
+
+export default function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowDimensions;
+}
+
+function Particles(props) {
+    let demensions  = useWindowDimensions();
+    console.log(demensions['width']);
+    if(props.color[0]>255) props.color[0]=255;
+    if(props.color[1]>255) props.color[1]=255;
+    if(props.color[2]>255) props.color[2]=255;
+    console.log(props.color)
+    if(Number(props.color[0])+Number(props.color[1])+Number(props.color[2]) > ((255*3)*0.69)){
+        props.color[0]=props.color[0]*0.6;
+        props.color[1]=props.color[1]*0.6;
+        props.color[2]=props.color[2]*0.6;
+
+    }else{
+        props.color[0]=props.color[0]*1.6;
+        props.color[1]=props.color[1]*1.6;
+        props.color[2]=props.color[2]*1.6;
+        
+    }
+    console.log(props.color)
+
+    var buf = [];
+    var buf_len = Math.random() * 10 + 100; // user defined length
+    for(var i = 0; i < buf_len; i++) {
+        buf.push(i);
+    }
+    console.log(buf);
+
+    return <div>
+            {buf.map((i) => <motion.div key={i} style={{position: 'absolute',borderRadius: '50%', backgroundColor:'rgb('+props.color[0]+', '+props.color[1]+', '+props.color[2]+')', aspectRatio: '1 / 1', width: String(Math.random() * 100)+'px'}}
+                animate={{
+                    opacity:[0.3, 0],
+                    scale: [0, 1],
+                    y:[Math.random() * (demensions['height'] *0.1 ) + (demensions['height'] *0.5 ), 0],
+                    x:[Math.random() * demensions['width'], Math.random() * demensions['width']]
+                }}
+                    transition={{
+                    duration: Math.random() * 5 + 5,
+                    ease: "easeInOut",
+                    times: [0, 1],
+                    repeat: Infinity,
+                    repeatDelay: Math.random() * 2 + 0.1,
+                }}
+            />)}
+            </div> 
+}
 
 
 function get_numbers_from_text(str) { 
@@ -49,11 +118,11 @@ function change_txt_color(r,g,b){
     
 }
 
-
 function colors_div_block(){
     return(
         <div className = "w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
-            <div id="text_area" className=" w-full h-1/3 text-center text-4xl " >
+            <div  id='text_area_lol' className=" w-full h-1/3 text-center text-4xl " > 
+            <Particles color={[this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2]]} id = {document.getElementById('text_area_lol')}/>
                 <div className="w-full h-full relative ">
                     <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                         <div style={{display: 'table-cell', verticalAlign: 'middle'}}>
