@@ -33,53 +33,6 @@ export default function useWindowDimensions() {
   return windowDimensions;
 }
 
-function Particles(props) {
-    let demensions  = useWindowDimensions();
-    console.log(demensions['width']);
-    if(props.color[0]>255) props.color[0]=255;
-    if(props.color[1]>255) props.color[1]=255;
-    if(props.color[2]>255) props.color[2]=255;
-    console.log(props.color)
-    if(Number(props.color[0])+Number(props.color[1])+Number(props.color[2]) > ((255*3)*0.69)){
-        props.color[0]=props.color[0]*0.6;
-        props.color[1]=props.color[1]*0.6;
-        props.color[2]=props.color[2]*0.6;
-
-    }else{
-        props.color[0]=props.color[0]*1.6;
-        props.color[1]=props.color[1]*1.6;
-        props.color[2]=props.color[2]*1.6;
-        
-    }
-    console.log(props.color)
-
-    var buf = [];
-    var buf_len = Math.random() * 10 + 100; // user defined length
-    for(var i = 0; i < buf_len; i++) {
-        buf.push(i);
-    }
-    console.log(buf);
-
-    return <div>
-            {buf.map((i) => <motion.div key={i} style={{position: 'absolute',borderRadius: '50%', backgroundColor:'rgb('+props.color[0]+', '+props.color[1]+', '+props.color[2]+')', aspectRatio: '1 / 1', width: String(Math.random() * 100)+'px'}}
-                animate={{
-                    opacity:[0.3, 0],
-                    scale: [0, 1],
-                    y:[Math.random() * (demensions['height'] *0.1 ) + (demensions['height'] *0.5 ), 0],
-                    x:[Math.random() * demensions['width'], Math.random() * demensions['width']]
-                }}
-                    transition={{
-                    duration: Math.random() * 5 + 5,
-                    ease: "easeInOut",
-                    times: [0, 1],
-                    repeat: Infinity,
-                    repeatDelay: Math.random() * 2 + 0.1,
-                }}
-            />)}
-            </div> 
-}
-
-
 function get_numbers_from_text(str) { 
     var result = str.toString().split(', ');
     return(result) 
@@ -122,7 +75,6 @@ function colors_div_block(){
     return(
         <div className = "w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
             <div  id='text_area_lol' className=" w-full h-1/3 text-center text-4xl " > 
-            
                 <div className="w-full h-full relative ">
                     <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                         <div style={{display: 'table-cell', verticalAlign: 'middle'}}>
@@ -229,19 +181,19 @@ function game_over_div_block(){
 
                             <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
                                 <div className="px-5 py-1" onClick={()=>post_to_wall()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
-                                    <motion.div animate={{rotate: [0, 2, -2, 0]}} transition={{duration: 2, repeat: Infinity, repeatDelay: 5}}> Поделиться результатом</motion.div>   
+                                    <motion.div animate={{rotate: [0, 2, -2, 0]}} transition={{duration: 2, repeat: Infinity, repeatDelay: Math.random() * 5 +2}}> Поделиться результатом</motion.div>   
                                 </div>
                             </motion.div>
 
                             <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [-400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
                                 <div className="px-5 py-1" onClick={()=>app_share()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
-                                    <motion.div animate={{rotate: [0, 1, -1, 0]}} transition={{duration: 3, repeat: Infinity, repeatDelay: 8}}> Поделиться игрой</motion.div>   
+                                    <motion.div animate={{rotate: [0, 1, -1, 0]}} transition={{duration: 3, repeat: Infinity, repeatDelay: Math.random() * 5 +3}}> Поделиться игрой</motion.div>   
                                 </div>
                             </motion.div>
 
                             <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
                                 <div className="px-5 py-1" onClick={()=>invite_to_game()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
-                                    <motion.div animate={{rotate: [0, 4, -4, 0]}} transition={{duration: 1, repeat: Infinity, repeatDelay: 12}}> Пригласить друга</motion.div>   
+                                    <motion.div animate={{rotate: [0, 4, -4, 0]}} transition={{duration: 1, repeat: Infinity, repeatDelay: Math.random() * 5 +4}}> Пригласить друга</motion.div>   
                                 </div>
                             </motion.div>
                         </div> 
