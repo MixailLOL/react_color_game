@@ -132,10 +132,22 @@ function colors_div_block(){
             </div>
         );
     } finally{
-            setInterval(function(){
-                particle();     
+            
+            var particles_main = setInterval(function(){   
+                let game_state = game_state_checker();
+                if( game_state != 'game'){
+                    clearInterval(particles_main);
+                }
+                particle(); 
             }, Math.random()*180 + 80);
+            
+            
     };
+}
+
+function game_state_checker(){
+    let game_state = this.state.game_state;
+    return game_state;
 }
 
 function points_div_block(){
@@ -300,6 +312,7 @@ class Game extends React.Component {
         this.check_answer = this.check_answer.bind(this);
         this.restart_game = this.restart_game.bind(this);
         this.set_true_color = this.set_true_color.bind(this);
+
         colors_div_block = colors_div_block.bind(this);
         game_over_div_block = game_over_div_block.bind(this);
         points_div_block = points_div_block.bind(this);
@@ -307,6 +320,7 @@ class Game extends React.Component {
         leader_board_box = leader_board_box.bind(this);
         post_to_wall = post_to_wall.bind(this);
         particle = particle.bind(this);
+        game_state_checker = game_state_checker.bind(this);
         
         this.state.color_array[0] = this.get_random_color(); 
         this.state.color_array[1] = this.get_random_color(); 
