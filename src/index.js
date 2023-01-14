@@ -72,27 +72,53 @@ function change_txt_color(r,g,b){
 }
 
 
-function particle() {
+function particle(type) {
     let diment = getWindowDimensions();
     var element = document.createElement("div");
-    let size_l = Math.round(Math.random() * (diment['width']*0.08) + 20);
-    let color = arrayRandElement(this.state.color_array)[1]
     let id_n = Math.random()*9999
-    let y_space = Number(Math.round(Math.random() * (((Number(diment['width']) - Number(size_l)*1.5)) - Number(size_l)*1.5 + Number(size_l)) + Number(size_l)*1.5 - Number(size_l)));
-    element.setAttribute('id','particle'+id_n);
-    element.setAttribute('style','background-color: rgb('+color[0]+', '+color[1]+', '+color[2]+'); width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+y_space+'px;');
-    element.setAttribute('class','absolute rounded-full');
-    //element.appendChild(document.createTextNode('The man who mistook his wife for a hat'));
-    document.body.prepend(element);
-    const timeline = gsap.timeline({
-      repeat: 0,
-      yoyo: false,
-      defaults: { duration: Math.random() * 4 + 1, ease: ("custom", "M0,0 C0.266,0.412 0.691,0.209 0.82,0.33 0.822,0.332 0.856,0.406 0.858,0.412 0.888,0.506 0.791,1 1,1 ") }
-    });
+    if(type == 'game'){
+        let size_l = Math.round(Math.random() * ((diment['width']*0.1) - 20) + 20);
+        let color = arrayRandElement(this.state.color_array)[1]
+        let y_space = Number(Math.round(Math.random() * (((Number(diment['width']) - Number(size_l)*1.5)) - Number(size_l)*1.5 + Number(size_l)) + Number(size_l)*1.5 - Number(size_l)));
+        element.setAttribute('id','particle'+id_n);
+        element.setAttribute('style','background-color: rgb('+color[0]+', '+color[1]+', '+color[2]+'); width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+y_space+'px;');
+        element.setAttribute('class','absolute rounded-full blur-sm');
+        document.body.before(element);
+        const timeline = gsap.timeline({
+          repeat: 0,
+          yoyo: false,
+          defaults: { ease: ("custom", "M0,0 C0.266,0.412 0.691,0.209 0.82,0.33 0.822,0.332 0.856,0.406 0.858,0.412 0.888,0.506 0.791,1 1,1 ") }
+        });
+        timeline
+          .to(element, { y: - ((diment['height']/3)*((size_l/(diment['width']*0.1)))),scale: 1.5, duration: Math.random() * 4 + 2 })
+          .to(element, {scale: 0, opacity: 0,duration: Math.random() * 5 + 2 , onComplete: function() {document.getElementById("particle"+id_n).remove()}});
+        console.log(((size_l/((diment['width']*0.1)))))
+    }
+    else if(type == 'loose'){
+        let size_l = Math.round(Math.random() * (diment['width']*0.08) + 20);
+        let color = arrayRandElement(this.state.color_array)[1]
+        let y_space = Number(Math.round(Math.random() * (((Number(diment['width']) - Number(size_l)*1.5)) - Number(size_l)*1.5 + Number(size_l)) + Number(size_l)*1.5 - Number(size_l)));
+        element.setAttribute('id','particle'+id_n);
+        let color_type = Math.round(Math.random());
+        if(color_type == 1){
+            element.setAttribute('style','background-color: rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', ' + this.state.true_color[1][2] +'); width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/4)+'px; left:'+y_space+'px;');
+        }
+        else{
+            element.setAttribute('style','background-color: rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+'); width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/2)+'px; left:'+y_space+'px;');
+        }
+        element.setAttribute('class','blur-sm absolute rounded-full');   
+        document.body.append(element);
+        const timeline = gsap.timeline({
+          repeat: 0,
+          yoyo: false,
+          defaults: { duration: Math.random() * 4 + 1, ease: ("custom", "M0,0 C0.266,0.412 0.691,0.209 0.82,0.33 0.822,0.332 0.856,0.406 0.858,0.412 0.888,0.506 0.791,1 1,1 ") }
+        });
 
-    timeline
-      .to(element, { y: - (diment['height']/3),scale: 1.5, duration: Math.random() * 1 + 0.5 })
-      .to(element, {scale: 0, duration: Math.random() * 0.5 + 0.5 , onComplete: function() {document.getElementById("particle"+id_n).remove()}});
+        timeline
+          .to(element, { y: - (Number(diment['height'])/4),scale: 1.5, duration: Math.random() * 1 + 0.5 })
+          .to(element, {scale: 0, duration: Math.random() * 0.5 + 0.5 , onComplete: function() {document.getElementById("particle"+id_n).remove()}});
+    }
+    
 }
     
 
@@ -104,7 +130,7 @@ function colors_div_block(){
                     <div className="w-full h-full relative ">
                         <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                             <div style={{display: 'table-cell', verticalAlign: 'middle'}} >
-                                <div id="test" style={{marginLeft: 'auto', marginRight: 'auto'} }>
+                                <div id="test" style={{marginLeft: 'auto', marginRight: 'auto'}} >
                                     <div id="viberi_color">
                                     Выбери цвет:
                                     </div>
@@ -132,16 +158,13 @@ function colors_div_block(){
             </div>
         );
     } finally{
-            
-            var particles_main = setInterval(function(){   
-                let game_state = game_state_checker();
-                if( game_state != 'game'){
-                    clearInterval(particles_main);
-                }
-                particle(); 
-            }, Math.random()*180 + 80);
-            
-            
+        var particles_main = setInterval(function(){   
+            let game_state = game_state_checker();
+            if( game_state != 'game'){
+                clearInterval(particles_main);
+            }
+            particle('game'); 
+        }, Math.random()*500 + 200);
     };
 }
 
@@ -167,85 +190,95 @@ function points_div_block(){
 }
 
 function game_over_div_block(){
-    return(
-        <div className = "w-full h-screen select-none"  style={{fontFamily: 'Roboto, sans-serif' }} >
-            <div id="answer_div" className="h-1/2 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
-                <div className="flex flex-col h-full w-full text-center text-3xl">
-                    <div className="w-full h-1/2 relative ">
-                        <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
-                            <div id="what_prsd_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
-                                <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                                    <div className="w-full h-1/2 "  id="what_pressed" >Вы выбрали: {this.state.presed_color[0]}</div>
+    try{
+        return(
+            <div className = "w-full h-screen select-none"  style={{fontFamily: 'Roboto, sans-serif' }} >
+                <div id="answer_div" className="h-1/2 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
+                    <div className="flex flex-col h-full w-full text-center text-3xl">
+                        <div className="w-full h-1/2 relative ">
+                            <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
+                                <div id="what_prsd_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                                    <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                                        <div className="w-full h-1/2"  id="what_pressed">Вы выбрали: {this.state.presed_color[0]}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="w-full h-1/2 relative " style={{backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
-                        <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
-                            <div id="clr_to_prs_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
-                                <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                                    <div className="w-full h-1/2" id="color_to_press" >Искомый цвет: {this.state.true_color[0]}</div>
+                        <div className="w-full h-1/2 relative " style={{backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
+                            <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
+                                <div id="clr_to_prs_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                                    <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                                        <div className="w-full h-1/2" id="color_to_press" >Искомый цвет: {this.state.true_color[0]}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="end_game" className=" w-full h-1/2 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
-                <div className="w-full h-full relative ">
-                    <div className="absolute w-full h-1/2" style={{display: 'table',  top: '0', left: '0'}}>
-                        <div id="end_game_out_div" className="h-full">
-                            <div  className="h-full" style={{marginLeft: 'auto', marginRight: 'auto', fontWeight:'bold'}}>
-                                <div className="h-full" id="btn_rstrt_div">
-                                    <div  className=" mt-4">
-                                        <p>Очки: {this.state.old_points_count}</p>
-                                    </div>
-                                    <div className="my-2">
-                                        <p>Рекорд: {this.state.local_best_score}</p>
-                                    </div>
-                                    <div className="h-1/3 w-full">
-                                        <motion.div animate={{scale: [1, 1.2, 1]}} transition={{duration: 0.5,ease: "easeInOut",repeat: Infinity,repeatDelay: 3}} onClick={()=>this.restart_game()} className="h-full px-5"  style={{ borderRadius: '20px',margin: "0 auto", display: 'table',  top: '0', left: '0', backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
-                                            <div  className="mt-4 w-full text-center h-1/2" style={{display: 'table-cell', verticalAlign: 'middle'}}>
-                                                <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                                                    <div className="h-1/2" >Начать занаво</div>
+                <div id="end_game" className=" w-full h-1/2 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
+                    <div className="w-full h-full relative ">
+                        <div className="absolute w-full h-1/2" style={{display: 'table',  top: '0', left: '0'}}>
+                            <div id="end_game_out_div" className="h-full">
+                                <div  className="h-full" style={{marginLeft: 'auto', marginRight: 'auto', fontWeight:'bold'}}>
+                                    <div className="h-full" id="btn_rstrt_div">
+                                        <div  className=" mt-4">
+                                            <p>Очки: {this.state.old_points_count}</p>
+                                        </div>
+                                        <div className="my-2">
+                                            <p>Рекорд: {this.state.local_best_score}</p>
+                                        </div>
+                                        <div className="h-1/3 w-full">
+                                            <motion.div animate={{scale: [1, 1.2, 1]}} transition={{duration: 0.5,ease: "easeInOut",repeat: Infinity,repeatDelay: 3}} onClick={()=>this.restart_game()} className="h-full px-5"  style={{ borderRadius: '20px',margin: "0 auto", display: 'table',  top: '0', left: '0', backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
+                                                <div  className="mt-4 w-full text-center h-1/2" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                                                    <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                                                        <div className="h-1/2" >Начать занаво</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </motion.div>
+                                            </motion.div>
+                                        </div>
+                                        
                                     </div>
-                                    
                                 </div>
+                                
                             </div>
-                            
+                        </div>
+                        <div className="text-bottom h-1/2 text-2xl absolute w-full" style={{bottom: '0', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
+                            <div style={{bottom: '0px'}} className="absolute w-full">
+
+                                <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
+                                    <div className="px-5 py-1" onClick={()=>post_to_wall()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
+                                        <motion.div animate={{rotate: [0, 2, -2, 0]}} transition={{duration: 2, repeat: Infinity, repeatDelay: Math.random() * 5 +2}}> Поделиться результатом</motion.div>   
+                                    </div>
+                                </motion.div>
+
+                                <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [-400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
+                                    <div className="px-5 py-1" onClick={()=>app_share()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
+                                        <motion.div animate={{rotate: [0, 1, -1, 0]}} transition={{duration: 3, repeat: Infinity, repeatDelay: Math.random() * 5 +3}}> Поделиться игрой</motion.div>   
+                                    </div>
+                                </motion.div>
+
+                                <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
+                                    <div className="px-5 py-1" onClick={()=>invite_to_game()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
+                                        <motion.div animate={{rotate: [0, 4, -4, 0]}} transition={{duration: 1, repeat: Infinity, repeatDelay: Math.random() * 5 +4}}> Пригласить друга</motion.div>   
+                                    </div>
+                                </motion.div>
+                            </div> 
                         </div>
                     </div>
-                    <div className="text-bottom h-1/2 text-2xl absolute w-full" style={{bottom: '0', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
-                        <div style={{bottom: '0px'}} className="absolute w-full">
-
-                            <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
-                                <div className="px-5 py-1" onClick={()=>post_to_wall()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
-                                    <motion.div animate={{rotate: [0, 2, -2, 0]}} transition={{duration: 2, repeat: Infinity, repeatDelay: Math.random() * 5 +2}}> Поделиться результатом</motion.div>   
-                                </div>
-                            </motion.div>
-
-                            <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [-400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
-                                <div className="px-5 py-1" onClick={()=>app_share()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
-                                    <motion.div animate={{rotate: [0, 1, -1, 0]}} transition={{duration: 3, repeat: Infinity, repeatDelay: Math.random() * 5 +3}}> Поделиться игрой</motion.div>   
-                                </div>
-                            </motion.div>
-
-                            <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
-                                <div className="px-5 py-1" onClick={()=>invite_to_game()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
-                                    <motion.div animate={{rotate: [0, 4, -4, 0]}} transition={{duration: 1, repeat: Infinity, repeatDelay: Math.random() * 5 +4}}> Пригласить друга</motion.div>   
-                                </div>
-                            </motion.div>
-                        </div> 
-                    </div>
                 </div>
-            </div>
 
-        </div>
-    )
+            </div>
+        )
+    } finally{
+        var particles_gg = setInterval(function(){   
+            let game_state = game_state_checker();
+            if( game_state != 'loose'){
+                clearInterval(particles_gg);
+            }
+            particle('loose'); 
+        }, Math.random()*180 + 80);
+    }
 }
 
 
