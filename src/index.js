@@ -75,11 +75,12 @@ function change_txt_color(r,g,b){
 function particle() {
     let diment = getWindowDimensions();
     var element = document.createElement("div");
-    let size_l = Math.round(Math.random() * (diment['width']*0.11) + (diment['width']*0.04));
+    let size_l = Math.round(Math.random() * (diment['width']*0.05) + 50);
     let color = arrayRandElement(this.state.color_array)[1]
     let id_n = Math.random()*9999
+    let y_space = Number(Math.round(Math.random() * (((Number(diment['width']) - Number(size_l)*1.5)) - Number(size_l)*1.5 + Number(size_l)) + Number(size_l)*1.5 - Number(size_l)));
     element.setAttribute('id','particle'+id_n);
-    element.setAttribute('style','background-color: rgb('+color[0]+', '+color[1]+', '+color[2]+'); width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+Math.round(Math.random() * diment['width'])+'px;');
+    element.setAttribute('style','background-color: rgb('+color[0]+', '+color[1]+', '+color[2]+'); width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+y_space+'px;');
     element.setAttribute('class','absolute rounded-full');
     //element.appendChild(document.createTextNode('The man who mistook his wife for a hat'));
     document.body.prepend(element);
@@ -90,7 +91,7 @@ function particle() {
     });
 
     timeline
-      .to(element, { y: - (diment['height']/3), x:(Math.round(Math.random()) * 2 - 1)*(Math.random() * (size_l/2)),scale: 1.5, duration: Math.random() * 1 + 0.5 })
+      .to(element, { y: - (diment['height']/3),scale: 1.5, duration: Math.random() * 1 + 0.5 })
       .to(element, {scale: 0, duration: Math.random() * 0.5 + 0.5 , onComplete: function() {document.getElementById("particle"+id_n).remove()}});
 }
     
@@ -133,7 +134,7 @@ function colors_div_block(){
     } finally{
             setInterval(function(){
                 particle();     
-            }, Math.random()*180 + 50);
+            }, Math.random()*180 + 80);
     };
 }
 
