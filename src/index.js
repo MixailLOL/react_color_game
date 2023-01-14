@@ -5,7 +5,7 @@ import {colors_data} from './colors.js'
 import bridge from '@vkontakte/vk-bridge';
 import { motion } from "framer-motion"
 import { useState, useEffect, useRef } from 'react';
-
+import gsap from "gsap";
 
 bridge.send("VKWebAppInit").then( (data) => {console.log(data) });
 bridge.subscribe((e) => console.log("vkBridge event", e));
@@ -71,40 +71,65 @@ function change_txt_color(r,g,b){
     
 }
 
+function test() {
+    let diment = getWindowDimensions();
+    var element = document.createElement("div");
+    let size_l = Math.round(Math.random() * 100 + 10);
+    element.setAttribute('id','animate');
+    element.setAttribute('style','background-color: rgb('+Math.round(Math.random() * 256)+', '+Math.round(Math.random() * 256)+', '+Math.round(Math.random() * 256)+'); width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+Math.round(Math.random() * diment['width'])+'px;');
+    element.setAttribute('class','absolute rounded-full');
+    //element.appendChild(document.createTextNode('The man who mistook his wife for a hat'));
+    document.body.prepend(element);
+    const timeline = gsap.timeline({
+      repeat: -1,
+      yoyo: false,
+      defaults: { duration: Math.random() * 1 + 1, ease: "easeInOut" }
+    });
+
+    timeline
+      .to(element, { y: - (diment['height']/3-size_l), x:(Math.round(Math.random()) * 2 - 1)*(Math.random() * (size_l/2)),scale: 1.5, duration: Math.random() * 1 + 0.5 })
+      .to(element, {scale: 0, duration: Math.random() * 0.5 + 0.5 });
+    }
+
 function colors_div_block(){
-    return(
-        <div className = "w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
-            <div  id='text_area_lol' className=" w-full h-1/3 text-center text-4xl " > 
-                <div className="w-full h-full relative ">
-                    <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
-                        <div style={{display: 'table-cell', verticalAlign: 'middle'}}>
-                            <div style={{marginLeft: 'auto', marginRight: 'auto'} }>
-                                <div id="viberi_color">
-                                Выбери цвет:
-                                </div>
-                                <div id="color_name">
-                                    {this.state.true_color[0]}
-                                </div>
-                                <div className="flex flex-row text-center place-content-center">
-                                    <div>
-                                        Очки:
+    try{
+
+        return(
+            <div className = "w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
+                <div  id='text_area_lol' className=" w-full h-1/3 text-center text-4xl " > 
+                    <div className="w-full h-full relative ">
+                        <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
+                            <div style={{display: 'table-cell', verticalAlign: 'middle'}} >
+                                <div id="test" style={{marginLeft: 'auto', marginRight: 'auto'} }>
+                                    <div id="viberi_color">
+                                    Выбери цвет:
                                     </div>
-                                    <div id="good_answers_counter">
-                                        {this.state.points_count}
+                                    <div id="color_name">
+                                        {this.state.true_color[0]}
+                                    </div>
+                                    <div className="flex flex-row text-center place-content-center">
+                                        <div>
+                                            Очки:
+                                        </div>
+                                        <div id="good_answers_counter">
+                                            {this.state.points_count}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div id="colors_to_choice" className="h-2/3 w-full absolute">
+                    <motion.div id="colors" className="h-full w-full flex flex-row place-content-center" >
+                        {this.state.colors_id.map(color => <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }} key={color} onClick={()=>this.check_answer(this.state.color_array[color])}  className="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> </motion.div>) }
+                    </motion.div>
+                </div>
             </div>
-            <div id="colors_to_choice" className="h-2/3 w-full absolute">
-                <motion.div id="colors" className="h-full w-full flex flex-row place-content-center" >
-                    {this.state.colors_id.map(color => <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.9 }} key={color} onClick={()=>this.check_answer(this.state.color_array[color])}  className="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> </motion.div>) }
-                </motion.div>
-            </div>
-        </div>
-    )
+        );
+    } finally{
+        test();
+    };
 }
 
 function points_div_block(){
