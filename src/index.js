@@ -71,33 +71,27 @@ function change_txt_color(r,g,b){
     
 }
 
-function dlt_paricles(){
-    while(document.getElementById("particle")){
-        document.getElementById("particle").remove();        
-    }
-}
 
 function particle() {
     let diment = getWindowDimensions();
     var element = document.createElement("div");
-    let size_l = Math.round(Math.random() * 100 + 10);
+    let size_l = Math.round(Math.random() * (diment['width']*0.11) + (diment['width']*0.04));
     let color = arrayRandElement(this.state.color_array)[1]
-    element.setAttribute('id','particle');
+    let id_n = Math.random()*9999
+    element.setAttribute('id','particle'+id_n);
     element.setAttribute('style','background-color: rgb('+color[0]+', '+color[1]+', '+color[2]+'); width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+Math.round(Math.random() * diment['width'])+'px;');
     element.setAttribute('class','absolute rounded-full');
     //element.appendChild(document.createTextNode('The man who mistook his wife for a hat'));
     document.body.prepend(element);
     const timeline = gsap.timeline({
-      repeat: -1,
+      repeat: 0,
       yoyo: false,
-      defaults: { duration: Math.random() * 1 + 1, ease: "easeInOut" }
+      defaults: { duration: Math.random() * 2 + 1, ease: "easeInOut" }
     });
 
     timeline
-      .to(element, { y: - (diment['height']/3-size_l), x:(Math.round(Math.random()) * 2 - 1)*(Math.random() * (size_l/2)),scale: 1.5, duration: Math.random() * 1 + 0.5 })
-      .to(element, {scale: 0, duration: Math.random() * 0.5 + 0.5 });
-
-    console.log(color)
+      .to(element, { y: - (diment['height']/3), x:(Math.round(Math.random()) * 2 - 1)*(Math.random() * (size_l/2)),scale: 1.5, duration: Math.random() * 1 + 0.5 })
+      .to(element, {scale: 0, duration: Math.random() * 0.5 + 0.5 , onComplete: function() {document.getElementById("particle"+id_n).remove()}});
 }
     
 
@@ -137,10 +131,9 @@ function colors_div_block(){
             </div>
         );
     } finally{
-        dlt_paricles();
-        for(let i = 0; i < 100; i++){
-            particle(); 
-        }
+            setInterval(function(){
+                particle();     
+            }, Math.random()*180 + 50);
     };
 }
 
