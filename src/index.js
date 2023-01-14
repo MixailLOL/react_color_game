@@ -71,12 +71,19 @@ function change_txt_color(r,g,b){
     
 }
 
-function test() {
+function dlt_paricles(){
+    while(document.getElementById("particle")){
+        document.getElementById("particle").remove();        
+    }
+}
+
+function particle() {
     let diment = getWindowDimensions();
     var element = document.createElement("div");
     let size_l = Math.round(Math.random() * 100 + 10);
-    element.setAttribute('id','animate');
-    element.setAttribute('style','background-color: rgb('+Math.round(Math.random() * 256)+', '+Math.round(Math.random() * 256)+', '+Math.round(Math.random() * 256)+'); width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+Math.round(Math.random() * diment['width'])+'px;');
+    let color = arrayRandElement(this.state.color_array)[1]
+    element.setAttribute('id','particle');
+    element.setAttribute('style','background-color: rgb('+color[0]+', '+color[1]+', '+color[2]+'); width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+Math.round(Math.random() * diment['width'])+'px;');
     element.setAttribute('class','absolute rounded-full');
     //element.appendChild(document.createTextNode('The man who mistook his wife for a hat'));
     document.body.prepend(element);
@@ -89,11 +96,13 @@ function test() {
     timeline
       .to(element, { y: - (diment['height']/3-size_l), x:(Math.round(Math.random()) * 2 - 1)*(Math.random() * (size_l/2)),scale: 1.5, duration: Math.random() * 1 + 0.5 })
       .to(element, {scale: 0, duration: Math.random() * 0.5 + 0.5 });
-    }
+
+    console.log(color)
+}
+    
 
 function colors_div_block(){
     try{
-
         return(
             <div className = "w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
                 <div  id='text_area_lol' className=" w-full h-1/3 text-center text-4xl " > 
@@ -128,7 +137,10 @@ function colors_div_block(){
             </div>
         );
     } finally{
-        test();
+        dlt_paricles();
+        for(let i = 0; i < 100; i++){
+            particle(); 
+        }
     };
 }
 
@@ -300,6 +312,7 @@ class Game extends React.Component {
         change_bg_color = change_bg_color.bind(this);
         leader_board_box = leader_board_box.bind(this);
         post_to_wall = post_to_wall.bind(this);
+        particle = particle.bind(this);
         
         this.state.color_array[0] = this.get_random_color(); 
         this.state.color_array[1] = this.get_random_color(); 
