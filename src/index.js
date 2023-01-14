@@ -75,7 +75,7 @@ function change_txt_color(r,g,b){
 function particle() {
     let diment = getWindowDimensions();
     var element = document.createElement("div");
-    let size_l = Math.round(Math.random() * (diment['width']*0.05) + 50);
+    let size_l = Math.round(Math.random() * (diment['width']*0.08) + 20);
     let color = arrayRandElement(this.state.color_array)[1]
     let id_n = Math.random()*9999
     let y_space = Number(Math.round(Math.random() * (((Number(diment['width']) - Number(size_l)*1.5)) - Number(size_l)*1.5 + Number(size_l)) + Number(size_l)*1.5 - Number(size_l)));
@@ -87,7 +87,7 @@ function particle() {
     const timeline = gsap.timeline({
       repeat: 0,
       yoyo: false,
-      defaults: { duration: Math.random() * 2 + 1, ease: "easeInOut" }
+      defaults: { duration: Math.random() * 4 + 1, ease: ("custom", "M0,0 C0.266,0.412 0.691,0.209 0.82,0.33 0.822,0.332 0.856,0.406 0.858,0.412 0.888,0.506 0.791,1 1,1 ") }
     });
 
     timeline
