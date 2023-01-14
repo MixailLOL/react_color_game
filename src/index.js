@@ -77,7 +77,8 @@ function particle(type) {
     var element = document.createElement("div");
     let id_n = Math.random()*9999
     if(type == 'game'){
-        let size_l = Math.round(Math.random() * ((diment['width']*0.1) - 20) + 20);
+        let bigger_d = diment['width']>diment['height']?diment['width']:diment['height'];
+        let size_l = Math.round(Math.random() * ((bigger_d*0.1) - 30) + 30);
         let color = arrayRandElement(this.state.color_array)[1]
         let y_space = Number(Math.round(Math.random() * (((Number(diment['width']) - Number(size_l)*1.5)) - Number(size_l)*1.5 + Number(size_l)) + Number(size_l)*1.5 - Number(size_l)));
         element.setAttribute('id','particle'+id_n);
@@ -90,7 +91,7 @@ function particle(type) {
           defaults: { ease: ("custom", "M0,0 C0.266,0.412 0.691,0.209 0.82,0.33 0.822,0.332 0.856,0.406 0.858,0.412 0.888,0.506 0.791,1 1,1 ") }
         });
         timeline
-          .to(element, { y: - ((diment['height']/3)*((size_l/(diment['width']*0.1)))),scale: 1.5, duration: Math.random() * 4 + 2 })
+          .to(element, { y: - ((diment['height']/3)*((size_l/(bigger_d*0.1)))),scale: 1.5, duration: Math.random() * 4 + 2 })
           .to(element, {scale: 0, opacity: 0,duration: Math.random() * 5 + 2 , onComplete: function() {document.getElementById("particle"+id_n).remove()}});
         console.log(((size_l/((diment['width']*0.1)))))
     }
