@@ -73,24 +73,24 @@ function change_txt_color(r,g,b){
 
 
 function particle(type) {
-    var selected_color = Math.round(Math.random()* Number(this.state.color_array.length - 1));
-    let elem_to_particle = document.getElementById('color_'+selected_color)
-    var position = elem_to_particle.getBoundingClientRect();
-    var elem_to_particle_x = position.left;
-    var elem_to_particle_y = position.top;
-    var elem_to_particle_height = position.height;
-    var elem_to_particle_width = position.width;
     let diment = getWindowDimensions();
     var element = document.createElement("div");
     let id_n = Math.random()*9999
     if(type == 'game'){
+        var selected_color = Math.round(Math.random()* Number(this.state.color_array.length - 1));
+        let elem_to_particle = document.getElementById('color_'+selected_color)
+        var position = elem_to_particle.getBoundingClientRect();
+        var elem_to_particle_x = position.left;
+        var elem_to_particle_y = position.top;
+        var elem_to_particle_height = position.height;
+        var elem_to_particle_width = position.width;
         let bigger_d = diment['width']>diment['height']?diment['width']:diment['height'];
         let size_l = Math.round(Math.random() * ((elem_to_particle_width*0.5) - elem_to_particle_width*0.2) + elem_to_particle_width*0.2);
         let color = elem_to_particle.style.backgroundColor;
         let x_space = Number(Math.round(Math.random() * ( ((elem_to_particle_x+elem_to_particle_width) - (Number(size_l)*1.5)) - (Number(size_l)*1.5 - Number(size_l) + elem_to_particle_x) ) + Number(size_l)*1.5 - Number(size_l) + elem_to_particle_x));
         element.setAttribute('id','particle'+id_n);
         element.setAttribute('style','background-color: '+color+'; width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+x_space+'px;');
-        element.setAttribute('class','absolute rounded-full z-0');
+        element.setAttribute('class','absolute rounded-full');
         document.body.after(element);
         const timeline = gsap.timeline({
           repeat: 0,
@@ -105,24 +105,46 @@ function particle(type) {
         let color = arrayRandElement(this.state.color_array)[1]
         let y_space = Number(Math.round(Math.random() * (((Number(diment['width']) - Number(size_l)*1.5)) - Number(size_l)*1.5 + Number(size_l)) + Number(size_l)*1.5 - Number(size_l)));
         element.setAttribute('id','particle'+id_n);
+
         let color_type = Math.round(Math.random());
-        if(color_type == 1){
-            element.setAttribute('style','background-color: rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', ' + this.state.true_color[1][2] +'); width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/4)+'px; left:'+y_space+'px;');
+        if(color_type == 0){
+            let elem_to_particle = document.getElementById('end_game_next')
+            var position = elem_to_particle.getBoundingClientRect();
+            var elem_to_particle_x = position.left;
+            var elem_to_particle_y = position.top;
+            var elem_to_particle_height = position.height;
+            var elem_to_particle_width = position.width;
+            let size_l = Math.round(Math.random() * ((elem_to_particle_width*0.2) - elem_to_particle_width*0.1) + elem_to_particle_width*0.1);
+            let x_space = Number(Math.round(Math.random() * ((elem_to_particle_width)-(size_l))));
+            element.setAttribute('style','background-color: rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+'); width: '+ 
+                size_l+'px; height: '+size_l+'px; top:'+ Number(- Number(size_l)) +'px; left:'+x_space+'px; border-radius: 0% 0% 50% 50%');
+            element.setAttribute('class',' absolute');   
+            document.getElementById('end_game_next').prepend(element);
         }
         else{
-            element.setAttribute('style','background-color: rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+'); width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/2)+'px; left:'+y_space+'px;');
+            let elem_to_particle = document.getElementById('target_color')
+            var position = elem_to_particle.getBoundingClientRect();
+            var elem_to_particle_x = position.left;
+            var elem_to_particle_y = position.top;
+            var elem_to_particle_height = position.height;
+            var elem_to_particle_width = position.width;
+            let size_l = Math.round(Math.random() * ((elem_to_particle_width*0.2) - elem_to_particle_width*0.1) + elem_to_particle_width*0.1);
+            let x_space = Number(Math.round(Math.random() * ((elem_to_particle_width)-(size_l))));
+            element.setAttribute('style','background-color: rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+'); width: '+ 
+                size_l+'px; height: '+size_l+'px; top:'+  -Number(size_l) +'px; left:'+x_space+'px; border-radius: 0% 0% 50% 50%');
+            element.setAttribute('class',' absolute');   
+            document.getElementById('target_color').append(element);
+
         }
-        element.setAttribute('class','blur-sm absolute rounded-full');   
-        document.body.append(element);
         const timeline = gsap.timeline({
           repeat: 0,
           yoyo: false,
-          defaults: { duration: Math.random() * 4 + 1, ease: ("custom", "M0,0 C0.266,0.412 0.691,0.209 0.82,0.33 0.822,0.332 0.856,0.406 0.858,0.412 0.888,0.506 0.791,1 1,1 ") }
+          defaults: { ease: ("custom", "M0,0 C0.266,0.412 0.691,0.209 0.82,0.33 0.822,0.332 0.856,0.406 0.858,0.412 0.888,0.506 0.791,1 1,1 ") }
         });
 
         timeline
-          .to(element, { y: - (Number(diment['height'])/4),scale: 1.5, duration: Math.random() * 1 + 0.5 })
-          .to(element, {scale: 0, duration: Math.random() * 0.5 + 0.5 , onComplete: function() {document.getElementById("particle"+id_n).remove()}});
+          .to(element, { y: ( size_l*0.8), duration: Math.random() * 5 + 3})
+          .to(element, { opacity: 0, duration: 0.1, onComplete: function() {document.getElementById("particle"+id_n).remove()} });
     }
     
 }
@@ -162,7 +184,7 @@ function colors_div_block(){
                             <motion.div whileHover={{ scale: 0.98 }} whileTap={{ scale: 0.95 }} key={color} id={'color_'+color} onClick={()=>this.check_answer(this.state.color_array[color])}  className=" p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> 
                             <div className=" w-full h-1/6">
                                 <div id='colb_top' className="relative w-full h-1/3 bg-blue-400" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', borderRadius: '100% / 100%', top: '-17%'}}> 
-                                    <div id='colb_top' className="z-9 relative w-full h-full w-11/12 bg-blue-400" style={{margin: '0 auto', backgroundColor:'rgb('
+                                    <div id='colb_top' className="relative w-full h-full w-11/12 bg-blue-400" style={{margin: '0 auto', backgroundColor:'rgb('
                                     + this.state.color_array[color][1][0]*0.7+
                                     ', '+this.state.color_array[color][1][1]*0.7+
                                     ', '+this.state.color_array[color][1][2]*0.7+
@@ -211,19 +233,19 @@ function game_over_div_block(){
     try{
         return(
             <div className = "w-full h-screen select-none"  style={{fontFamily: 'Roboto, sans-serif' }} >
-                <div id="answer_div" className="h-1/2 w-full" style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
+                <div id="answer_div" className=" h-1/2 w-full " style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
                     <div className="flex flex-col h-full w-full text-center text-3xl">
                         <div className="w-full h-1/2 relative ">
                             <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                                 <div id="what_prsd_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
-                                    <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                                    <div id = "text_selected_color"style={{marginLeft: 'auto', marginRight: 'auto'}}>
                                         <div className="w-full h-1/2"  id="what_pressed">Вы выбрали: {this.state.presed_color[0]}</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="w-full h-1/2 relative " style={{backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
-                            <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
+                        <div id="target_color" className="overflow-hidden w-full h-1/2 relative " style={{backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
+                            <div id= "sub_target_color"className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                                 <div id="clr_to_prs_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
                                     <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
                                         <div className="w-full h-1/2" id="color_to_press" >Искомый цвет: {this.state.true_color[0]}</div>
@@ -234,10 +256,10 @@ function game_over_div_block(){
                     </div>
                 </div>
 
-                <div id="end_game" className=" w-full h-1/2 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
-                    <div className="w-full h-full relative ">
-                        <div className="absolute w-full h-1/2" style={{display: 'table',  top: '0', left: '0'}}>
-                            <div id="end_game_out_div" className="h-full">
+                <div id="end_game" className="overflow-hidden w-full h-1/2 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
+                    <div id="end_game_next"className="overflow-hidden w-full h-full relative ">
+                        <div className=" overflow-hidden absolute w-full h-1/2" style={{display: 'table',  top: '0', left: '0'}}>
+                            <div id="end_game_out_div" className="overflow-hidden h-full">
                                 <div  className="h-full" style={{marginLeft: 'auto', marginRight: 'auto', fontWeight:'bold'}}>
                                     <div className="h-full" id="btn_rstrt_div">
                                         <div  className=" mt-4">
@@ -295,7 +317,7 @@ function game_over_div_block(){
                 clearInterval(particles_gg);
             }
             particle('loose'); 
-        }, Math.random()*180 + 80);
+        }, Math.random()*2000 + 800);
     }
 }
 
