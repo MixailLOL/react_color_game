@@ -73,17 +73,24 @@ function change_txt_color(r,g,b){
 
 
 function particle(type) {
+    var selected_color = Math.round(Math.random()* Number(this.state.color_array.length - 1));
+    let elem_to_particle = document.getElementById('color_'+selected_color)
+    var position = elem_to_particle.getBoundingClientRect();
+    var elem_to_particle_x = position.left;
+    var elem_to_particle_y = position.top;
+    var elem_to_particle_height = position.height;
+    var elem_to_particle_width = position.width;
     let diment = getWindowDimensions();
     var element = document.createElement("div");
     let id_n = Math.random()*9999
     if(type == 'game'){
         let bigger_d = diment['width']>diment['height']?diment['width']:diment['height'];
         let size_l = Math.round(Math.random() * ((bigger_d*0.1) - 30) + 30);
-        let color = arrayRandElement(this.state.color_array)[1]
-        let y_space = Number(Math.round(Math.random() * (((Number(diment['width']) - Number(size_l)*1.5)) - Number(size_l)*1.5 + Number(size_l)) + Number(size_l)*1.5 - Number(size_l)));
+        let color = elem_to_particle.style.backgroundColor;
+        let x_space = Number(Math.round(Math.random() * ( ((elem_to_particle_x+elem_to_particle_width) - (Number(size_l)*1.5)) - (Number(size_l)*1.5 - Number(size_l) + elem_to_particle_x) ) + Number(size_l)*1.5 - Number(size_l) + elem_to_particle_x));
         element.setAttribute('id','particle'+id_n);
-        element.setAttribute('style','background-color: rgb('+color[0]+', '+color[1]+', '+color[2]+'); width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+y_space+'px;');
-        element.setAttribute('class','absolute rounded-full blur-sm');
+        element.setAttribute('style','background-color: '+color+'; width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+x_space+'px;');
+        element.setAttribute('class','absolute rounded-full ');
         document.body.before(element);
         const timeline = gsap.timeline({
           repeat: 0,
@@ -91,9 +98,7 @@ function particle(type) {
           defaults: { ease: ("custom", "M0,0 C0.266,0.412 0.691,0.209 0.82,0.33 0.822,0.332 0.856,0.406 0.858,0.412 0.888,0.506 0.791,1 1,1 ") }
         });
         timeline
-          .to(element, { y: - ((diment['height']/3)*((size_l/(bigger_d*0.1)))),scale: 1.5, duration: Math.random() * 4 + 2 })
-          .to(element, {scale: 0, opacity: 0,duration: Math.random() * 5 + 2 , onComplete: function() {document.getElementById("particle"+id_n).remove()}});
-        console.log(((size_l/((diment['width']*0.1)))))
+          .to(element, { y: - ((diment['height']/3)*((size_l/(bigger_d*0.1)))),opacity: 0,scale: [1.5, 0], duration: Math.random() * 4 + 2 , onComplete: function() {document.getElementById("particle"+id_n).remove()}});
     }
     else if(type == 'loose'){
         let size_l = Math.round(Math.random() * (diment['width']*0.08) + 20);
@@ -153,7 +158,7 @@ function colors_div_block(){
                 </div>
                 <div id="colors_to_choice" className="h-2/3 w-full absolute">
                     <motion.div id="colors" className="h-full w-full flex flex-row place-content-center" >
-                        {this.state.colors_id.map(color => <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }} key={color} onClick={()=>this.check_answer(this.state.color_array[color])}  className="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> </motion.div>) }
+                        {this.state.colors_id.map(color => <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }} key={color} id={'color_'+color} onClick={()=>this.check_answer(this.state.color_array[color])}  className="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> </motion.div>) }
                     </motion.div>
                 </div>
             </div>
