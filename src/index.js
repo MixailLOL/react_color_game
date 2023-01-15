@@ -85,13 +85,13 @@ function particle(type) {
     let id_n = Math.random()*9999
     if(type == 'game'){
         let bigger_d = diment['width']>diment['height']?diment['width']:diment['height'];
-        let size_l = Math.round(Math.random() * ((bigger_d*0.1) - 30) + 30);
+        let size_l = Math.round(Math.random() * ((elem_to_particle_width*0.5) - elem_to_particle_width*0.2) + elem_to_particle_width*0.2);
         let color = elem_to_particle.style.backgroundColor;
         let x_space = Number(Math.round(Math.random() * ( ((elem_to_particle_x+elem_to_particle_width) - (Number(size_l)*1.5)) - (Number(size_l)*1.5 - Number(size_l) + elem_to_particle_x) ) + Number(size_l)*1.5 - Number(size_l) + elem_to_particle_x));
         element.setAttribute('id','particle'+id_n);
         element.setAttribute('style','background-color: '+color+'; width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+x_space+'px;');
-        element.setAttribute('class','absolute rounded-full ');
-        document.body.before(element);
+        element.setAttribute('class','absolute rounded-full z-0');
+        document.body.after(element);
         const timeline = gsap.timeline({
           repeat: 0,
           yoyo: false,
@@ -156,13 +156,17 @@ function colors_div_block(){
                         </div>
                     </div>
                 </div>
-                <div id="colors_to_choice" className="h-2/3 w-full absolute">
-                    <motion.div id="colors" className="h-full w-full flex flex-row place-content-center" >
+                <div id="colors_to_choice" className=" h-2/3 w-full absolute">
+                    <motion.div id="colors" className=" h-full w-full flex flex-row place-content-center" >
                         {this.state.colors_id.map(color => 
-                            <motion.div whileHover={{ scale: 0.98 }} whileTap={{ scale: 0.95 }} key={color} id={'color_'+color} onClick={()=>this.check_answer(this.state.color_array[color])}  className="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> 
-                            <div className="w-full h-1/6">
+                            <motion.div whileHover={{ scale: 0.98 }} whileTap={{ scale: 0.95 }} key={color} id={'color_'+color} onClick={()=>this.check_answer(this.state.color_array[color])}  className=" p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> 
+                            <div className=" w-full h-1/6">
                                 <div id='colb_top' className="relative w-full h-1/3 bg-blue-400" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', borderRadius: '100% / 100%', top: '-17%'}}> 
-                                    <div id='colb_top' className="relative w-full h-full w-11/12 bg-blue-400" style={{margin: '0 auto', backgroundColor:'rgb('+this.state.color_array[color][1][0]*1.1+', '+this.state.color_array[color][1][1]*1.+', '+this.state.color_array[color][1][2]*1.1+')', borderRadius: '100% / 100%', top: '+20%'}}>           
+                                    <div id='colb_top' className="z-9 relative w-full h-full w-11/12 bg-blue-400" style={{margin: '0 auto', backgroundColor:'rgb('
+                                    + this.state.color_array[color][1][0]*0.7+
+                                    ', '+this.state.color_array[color][1][1]*0.7+
+                                    ', '+this.state.color_array[color][1][2]*0.7+
+                                    ')', borderRadius: '100% / 100%', top: '+20%'}}>           
                                 </div>
                                 </div>
                             </div>
