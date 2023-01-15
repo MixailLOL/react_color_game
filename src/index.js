@@ -158,7 +158,15 @@ function colors_div_block(){
                 </div>
                 <div id="colors_to_choice" className="h-2/3 w-full absolute">
                     <motion.div id="colors" className="h-full w-full flex flex-row place-content-center" >
-                        {this.state.colors_id.map(color => <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }} key={color} id={'color_'+color} onClick={()=>this.check_answer(this.state.color_array[color])}  className="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> </motion.div>) }
+                        {this.state.colors_id.map(color => 
+                            <motion.div whileHover={{ scale: 0.98 }} whileTap={{ scale: 0.95 }} key={color} id={'color_'+color} onClick={()=>this.check_answer(this.state.color_array[color])}  className="p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> 
+                            <div className="w-full h-1/6">
+                                <div id='colb_top' className="relative w-full h-1/3 bg-blue-400" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', borderRadius: '100% / 100%', top: '-17%'}}> 
+                                    <div id='colb_top' className="relative w-full h-full w-11/12 bg-blue-400" style={{margin: '0 auto', backgroundColor:'rgb('+this.state.color_array[color][1][0]*1.1+', '+this.state.color_array[color][1][1]*1.+', '+this.state.color_array[color][1][2]*1.1+')', borderRadius: '100% / 100%', top: '+20%'}}>           
+                                </div>
+                                </div>
+                            </div>
+                            </motion.div>) }
                     </motion.div>
                 </div>
             </div>
