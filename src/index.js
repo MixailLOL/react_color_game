@@ -89,9 +89,9 @@ function particle(type) {
         let color = elem_to_particle.style.backgroundColor;
         let x_space = Number(Math.round(Math.random() * ( ((elem_to_particle_x+elem_to_particle_width) - (Number(size_l)*1.5)) - (Number(size_l)*1.5 - Number(size_l) + elem_to_particle_x) ) + Number(size_l)*1.5 - Number(size_l) + elem_to_particle_x));
         element.setAttribute('id','particle'+id_n);
-        element.setAttribute('style','background-color: '+color+'; width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+x_space+'px;');
+        element.setAttribute('style','background-color: '+color+'; width: '+ size_l+'px; height: '+size_l+'px; top:'+0+'px; left:'+x_space+'px;');
         element.setAttribute('class','absolute rounded-full');
-        document.body.append(element);
+        document.getElementById('color_'+selected_color).append(element);
         const timeline = gsap.timeline({
           repeat: 0,
           yoyo: false,
@@ -155,31 +155,8 @@ function colors_div_block(){
     try{
         return(
             <div className = "w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
-                <div  id='text_area_lol' className=" w-full h-1/3 text-center text-4xl " > 
-                    <div className="w-full h-full relative ">
-                        <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
-                            <div style={{display: 'table-cell', verticalAlign: 'middle', zIndex: 99}} >
-                                <div id="test" style={{marginLeft: 'auto', marginRight: 'auto'}} >
-                                    <div id="viberi_color">
-                                    Выбери цвет:
-                                    </div>
-                                    <div id="color_name">
-                                        {this.state.true_color[0]}
-                                    </div>
-                                    <div className="flex flex-row text-center place-content-center">
-                                        <div>
-                                            Очки:
-                                        </div>
-                                        <div id="good_answers_counter">
-                                            {this.state.points_count}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="colors_to_choice" className=" h-2/3 w-full absolute">
+                
+                <div id="colors_to_choice" className="top-1/3 h-2/3 w-full absolute">
                     <motion.div id="colors" className=" h-full w-full flex flex-row place-content-center" >
                         {this.state.colors_id.map(color => 
                             <motion.div whileHover={{ scale: 0.98 }} whileTap={{ scale: 0.95 }} key={color} id={'color_'+color} onClick={()=>this.check_answer(this.state.color_array[color])}  className=" p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> 
@@ -195,6 +172,30 @@ function colors_div_block(){
                             </div>
                             </motion.div>) }
                     </motion.div>
+                </div>
+                <div  id='text_area_lol' className=" w-full h-1/3 text-center text-4xl " > 
+                    <div className="w-full h-full relative ">
+                        <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
+                            <div style={{display: 'table-cell', verticalAlign: 'middle', zIndex: 99}} >
+                                <div id="test" style={{marginLeft: 'auto', marginRight: 'auto'}} >
+                                    <div id="viberi_color">
+                                    Выбери цвет:
+                                    </div>
+                                    <div id='color_name'>
+                                        {this.state.true_color[0]}
+                                    </div>
+                                    <div className="flex flex-row text-center place-content-center">
+                                        <div>
+                                            Очки:
+                                        </div>
+                                        <div id="good_answers_counter">
+                                            {this.state.points_count}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
