@@ -91,7 +91,7 @@ function particle(type) {
         element.setAttribute('id','particle'+id_n);
         element.setAttribute('style','background-color: '+color+'; width: '+ size_l+'px; height: '+size_l+'px; top:'+(diment['height']/3)+'px; left:'+x_space+'px;');
         element.setAttribute('class','absolute rounded-full');
-        document.body.after(element);
+        document.body.append(element);
         const timeline = gsap.timeline({
           repeat: 0,
           yoyo: false,
@@ -114,10 +114,10 @@ function particle(type) {
             var elem_to_particle_y = position.top;
             var elem_to_particle_height = position.height;
             var elem_to_particle_width = position.width;
-            let size_l = Math.round(Math.random() * ((elem_to_particle_width*0.2) - elem_to_particle_width*0.1) + elem_to_particle_width*0.1);
+            size_l = Math.round(Math.random() * ((elem_to_particle_width*0.15) - elem_to_particle_width*0.05) + elem_to_particle_width*0.05);
             let x_space = Number(Math.round(Math.random() * ((elem_to_particle_width)-(size_l))));
             element.setAttribute('style','background-color: rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+'); width: '+ 
-                size_l+'px; height: '+size_l+'px; top:'+ Number(- Number(size_l)) +'px; left:'+x_space+'px; border-radius: 0% 0% 50% 50%');
+                size_l+'px; height: '+size_l+'px; top:'+ Number(- Number(size_l)) +'px; left:'+x_space+'px; border-radius: 0% 90% 90% 0%; transform: rotate(90deg)');
             element.setAttribute('class',' absolute');   
             document.getElementById('end_game_next').prepend(element);
         }
@@ -128,12 +128,12 @@ function particle(type) {
             var elem_to_particle_y = position.top;
             var elem_to_particle_height = position.height;
             var elem_to_particle_width = position.width;
-            let size_l = Math.round(Math.random() * ((elem_to_particle_width*0.2) - elem_to_particle_width*0.1) + elem_to_particle_width*0.1);
+            size_l = Math.round(Math.random() * ((elem_to_particle_width*0.15) - elem_to_particle_width*0.05) + elem_to_particle_width*0.05);
             let x_space = Number(Math.round(Math.random() * ((elem_to_particle_width)-(size_l))));
             element.setAttribute('style','background-color: rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+'); width: '+ 
-                size_l+'px; height: '+size_l+'px; top:'+  -Number(size_l) +'px; left:'+x_space+'px; border-radius: 0% 0% 50% 50%');
+                size_l+'px; height: '+size_l+'px; top:'+  -Number(size_l) +'px; left:'+x_space+'px; border-radius: 0% 90% 90% 0%; transform: rotate(90deg)');
             element.setAttribute('class',' absolute');   
-            document.getElementById('target_color').append(element);
+            document.getElementById('target_color').prepend(element);
 
         }
         const timeline = gsap.timeline({
@@ -143,8 +143,9 @@ function particle(type) {
         });
 
         timeline
-          .to(element, { y: ( size_l*0.8), duration: Math.random() * 5 + 3})
-          .to(element, { opacity: 0, duration: 0.1, onComplete: function() {document.getElementById("particle"+id_n).remove()} });
+          .to(element, { y: ( size_l*0.85), duration: Math.random() * 5 + 5})
+          .to(element, {borderRadius:'50%', duration:0.01})
+          .to(element, { y: elem_to_particle_height, scale: 0.8, duration:0.05,onComplete: function() {document.getElementById("particle"+id_n).remove()} });
     }
     
 }
@@ -157,7 +158,7 @@ function colors_div_block(){
                 <div  id='text_area_lol' className=" w-full h-1/3 text-center text-4xl " > 
                     <div className="w-full h-full relative ">
                         <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
-                            <div style={{display: 'table-cell', verticalAlign: 'middle'}} >
+                            <div style={{display: 'table-cell', verticalAlign: 'middle', zIndex: 99}} >
                                 <div id="test" style={{marginLeft: 'auto', marginRight: 'auto'}} >
                                     <div id="viberi_color">
                                     Выбери цвет:
@@ -184,7 +185,7 @@ function colors_div_block(){
                             <motion.div whileHover={{ scale: 0.98 }} whileTap={{ scale: 0.95 }} key={color} id={'color_'+color} onClick={()=>this.check_answer(this.state.color_array[color])}  className=" p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> 
                             <div className=" w-full h-1/6">
                                 <div id='colb_top' className="relative w-full h-1/3 bg-blue-400" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', borderRadius: '100% / 100%', top: '-17%'}}> 
-                                    <div id='colb_top' className="relative w-full h-full w-11/12 bg-blue-400" style={{margin: '0 auto', backgroundColor:'rgb('
+                                    <div id='colb_top_inside' className="relative w-full h-full w-11/12 bg-blue-400" style={{margin: '0 auto', backgroundColor:'rgb('
                                     + this.state.color_array[color][1][0]*0.7+
                                     ', '+this.state.color_array[color][1][1]*0.7+
                                     ', '+this.state.color_array[color][1][2]*0.7+
@@ -234,7 +235,7 @@ function game_over_div_block(){
         return(
             <div className = "w-full h-screen select-none"  style={{fontFamily: 'Roboto, sans-serif' }} >
                 <div id="answer_div" className=" h-1/2 w-full " style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
-                    <div className="flex flex-col h-full w-full text-center text-3xl">
+                    <div id = "sub_answer_div" className="flex flex-col h-full w-full text-center text-3xl">
                         <div className="w-full h-1/2 relative ">
                             <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                                 <div id="what_prsd_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
