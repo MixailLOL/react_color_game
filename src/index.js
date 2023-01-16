@@ -75,7 +75,8 @@ function change_txt_color(r,g,b){
 function particle(type) {
     let diment = getWindowDimensions();
     var element = document.createElement("div");
-    let id_n = Math.random()*9999
+    let id_n = Math.round(Math.random()*9999);
+    element.setAttribute('id','particle_'+id_n);
     if(type == 'game'){
         var selected_color = Math.round(Math.random()* Number(this.state.color_array.length - 1));
         let elem_to_particle = document.getElementById('color_'+selected_color)
@@ -88,24 +89,22 @@ function particle(type) {
         let size_l = Math.round(Math.random() * ((elem_to_particle_width*0.5) - elem_to_particle_width*0.2) + elem_to_particle_width*0.2);
         let color = elem_to_particle.style.backgroundColor;
         let x_space = Number(Math.round(Math.random() * ( ((elem_to_particle_x+elem_to_particle_width) - (Number(size_l)*1.5)) - (Number(size_l)*1.5 - Number(size_l) + elem_to_particle_x) ) + Number(size_l)*1.5 - Number(size_l) + elem_to_particle_x));
-        element.setAttribute('id','particle'+id_n);
         element.setAttribute('style','background-color: '+color+'; width: '+ size_l+'px; height: '+size_l+'px; top:'+0+'px; left:'+x_space+'px;');
         element.setAttribute('class','absolute rounded-full');
         document.getElementById('color_'+selected_color).after(element);
+        
         const timeline = gsap.timeline({
           repeat: 0,
           yoyo: false,
           defaults: { ease: ("custom", "M0,0 C0.266,0.412 0.691,0.209 0.82,0.33 0.822,0.332 0.856,0.406 0.858,0.412 0.888,0.506 0.791,1 1,1 ") }
         });
         timeline
-          .to(element, { y: - ((diment['height']/3)*((size_l/(bigger_d*0.1)))),opacity: 0,scale: [1.5, 0], duration: Math.random() * 4 + 2 , onComplete: function() {document.getElementById("particle"+id_n).remove()}});
+          .to(element, { y: - ((diment['height']/3)*((size_l/(bigger_d*0.1)))),opacity: 0,scale: [1.5, 0], duration: Math.random() * 4 + 2 , onComplete: function() {document.getElementById("particle_"+id_n).remove()}});
     }
     else if(type == 'loose'){
         let size_l = Math.round(Math.random() * (diment['width']*0.08) + 20);
-        let color = arrayRandElement(this.state.color_array)[1]
+        let color = Math.round(arrayRandElement(this.state.color_array)[1])
         let y_space = Number(Math.round(Math.random() * (((Number(diment['width']) - Number(size_l)*1.5)) - Number(size_l)*1.5 + Number(size_l)) + Number(size_l)*1.5 - Number(size_l)));
-        element.setAttribute('id','particle'+id_n);
-
         let color_type = Math.round(Math.random());
         if(color_type == 0){
             let elem_to_particle = document.getElementById('end_game_next')
@@ -118,7 +117,7 @@ function particle(type) {
             let x_space = Number(Math.round(Math.random() * ((elem_to_particle_width)-(size_l))));
             element.setAttribute('style','background-color: rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+'); width: '+ 
                 size_l+'px; height: '+size_l+'px; top:'+ Number(- Number(size_l)) +'px; left:'+x_space+'px; border-radius: 0% 90% 90% 0%; transform: rotate(90deg)');
-            element.setAttribute('class',' absolute');   
+            element.setAttribute('class',' absolute');  
             document.getElementById('end_game_next').prepend(element);
         }
         else{
@@ -145,7 +144,7 @@ function particle(type) {
         timeline
           .to(element, { y: ( size_l*0.85), duration: Math.random() * 5 + 5})
           .to(element, {borderRadius:'50%', duration:0.01})
-          .to(element, { y: elem_to_particle_height, scale: 0.8, opacity:0, duration:0.5,onComplete: function() {document.getElementById("particle"+id_n).remove()} });
+          .to(element, { y: elem_to_particle_height, scale: 0.8, opacity:0, duration:0.5,onComplete: function() {document.getElementById("particle_"+id_n).remove()} });
     }
     
 }
@@ -173,8 +172,8 @@ function colors_div_block(){
                             </motion.div>) }
                     </motion.div>
                 </div>
-                <div  id='text_area_lol' className=" w-full h-1/3 text-center text-4xl " > 
-                    <div className="w-full h-full relative ">
+                <div  id='text_area_lol' className=" relative w-full h-1/3 text-center text-4xl " > 
+                    <div id='sub_erea_text' className="w-full h-full  ">
                         <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                             <div style={{display: 'table-cell', verticalAlign: 'middle', zIndex: 99}} >
                                 <div id="test" style={{marginLeft: 'auto', marginRight: 'auto'}} >
@@ -200,6 +199,7 @@ function colors_div_block(){
             </div>
         );
     } finally{
+        dlt_prtcles('particle_');
         var particles_main = setInterval(function(){   
             let game_state = game_state_checker();
             if( game_state != 'game'){
@@ -208,6 +208,14 @@ function colors_div_block(){
             particle('game'); 
         }, Math.random()*500 + 200);
     };
+}
+
+function dlt_prtcles(pattern){
+    let elements = document.querySelectorAll('[id^="'+pattern+'"]');
+    for(let i = 0; i < elements.length; i ++){ 
+        console.log(elements[i]);
+        document.getElementById(elements[i].id).remove()
+    }
 }
 
 function game_state_checker(){
@@ -260,7 +268,7 @@ function game_over_div_block(){
 
                 <div id="end_game" className="overflow-hidden w-full h-1/2 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
                     <div id="end_game_next"className="overflow-hidden w-full h-full relative ">
-                        <div className=" overflow-hidden relative w-full h-1/2" style={{display: 'table',  top: '0', left: '0'}}>
+                        <div id="end_game_next2" className="overflow-hidden relative w-full h-1/2" style={{display: 'table',  top: '0', left: '0'}}>
                             <div id="end_game_out_div" className="overflow-hidden h-full">
                                 <div  className="h-full" style={{marginLeft: 'auto', marginRight: 'auto', fontWeight:'bold'}}>
                                     <div className="h-full" id="btn_rstrt_div">
@@ -367,6 +375,13 @@ function post_to_wall(){
   });
 }
 
+function dlt_particles(id){
+    let arr = this.state.particles;
+    let index = arr.indexOf(id);
+    arr = arr.splice(index, 1);
+    this.state.particles = arr;
+}
+
 class Game extends React.Component {
     constructor(props){
         super(props);
@@ -382,7 +397,6 @@ class Game extends React.Component {
             play_try_count: 1,
             local_best_score: 0,
         };
-
         this.get_random_color = this.get_random_color.bind(this);
         this.check_answer = this.check_answer.bind(this);
         this.restart_game = this.restart_game.bind(this);
