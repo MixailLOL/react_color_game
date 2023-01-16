@@ -91,7 +91,7 @@ function particle(type) {
         element.setAttribute('id','particle'+id_n);
         element.setAttribute('style','background-color: '+color+'; width: '+ size_l+'px; height: '+size_l+'px; top:'+0+'px; left:'+x_space+'px;');
         element.setAttribute('class','absolute rounded-full');
-        document.getElementById('color_'+selected_color).append(element);
+        document.getElementById('color_'+selected_color).after(element);
         const timeline = gsap.timeline({
           repeat: 0,
           yoyo: false,
