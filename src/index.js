@@ -258,19 +258,19 @@ function game_over_div_block(){
 
                 <div id="end_game" className="overflow-hidden w-full h-1/2 text-center text-4xl" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', 'width':'100%', 'color': change_txt_color(this.state.bg_color[0], this.state.bg_color[1], this.state.bg_color[2])}}>
                     <div id="end_game_next"className="overflow-hidden w-full h-full relative ">
-                        <div className=" overflow-hidden absolute w-full h-1/2" style={{display: 'table',  top: '0', left: '0'}}>
+                        <div className=" overflow-hidden relative w-full h-1/2" style={{display: 'table',  top: '0', left: '0'}}>
                             <div id="end_game_out_div" className="overflow-hidden h-full">
                                 <div  className="h-full" style={{marginLeft: 'auto', marginRight: 'auto', fontWeight:'bold'}}>
                                     <div className="h-full" id="btn_rstrt_div">
-                                        <div  className=" mt-4">
+                                        <div  className="h-1/3">
                                             <p>Очки: {this.state.old_points_count}</p>
                                         </div>
-                                        <div className="my-2">
+                                        <div className="h-1/3">
                                             <p>Рекорд: {this.state.local_best_score}</p>
                                         </div>
-                                        <div className="h-1/3 w-full">
+                                        <div className="py-1 h-1/3 w-full">
                                             <motion.div animate={{scale: [1, 1.2, 1]}} transition={{duration: 0.5,ease: "easeInOut",repeat: Infinity,repeatDelay: 3}} onClick={()=>this.restart_game()} className="h-full px-5"  style={{ borderRadius: '20px',margin: "0 auto", display: 'table',  top: '0', left: '0', backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
-                                                <div  className="mt-4 w-full text-center h-1/2" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                                                <div  className="mt-2 w-full text-center h-1/2" style={{display: 'table-cell', verticalAlign: 'middle'}}>
                                                     <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
                                                         <div className="h-1/2" >Начать занаво</div>
                                                     </div>
@@ -283,22 +283,22 @@ function game_over_div_block(){
                                 
                             </div>
                         </div>
-                        <div className="text-bottom h-1/2 text-2xl absolute w-full" style={{bottom: '0', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
-                            <div style={{bottom: '0px'}} className="absolute w-full">
+                        <div className="relative text-bottom h-1/2 text-2xl w-full" style={{ 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
+                            <div style={{bottom: '0px'}} className="h-full w-full">
 
-                                <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
+                                <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="h-1/3 text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
                                     <div className="px-5 py-1" onClick={()=>post_to_wall()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
                                         <motion.div animate={{rotate: [0, 2, -2, 0]}} transition={{duration: 2, repeat: Infinity, repeatDelay: Math.random() * 5 +2}}> Поделиться результатом</motion.div>   
                                     </div>
                                 </motion.div>
 
-                                <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [-400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
+                                <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [-400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="h-1/3 text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
                                     <div className="px-5 py-1" onClick={()=>app_share()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
                                         <motion.div animate={{rotate: [0, 1, -1, 0]}} transition={{duration: 3, repeat: Infinity, repeatDelay: Math.random() * 5 +3}}> Поделиться игрой</motion.div>   
                                     </div>
                                 </motion.div>
 
-                                <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
+                                <motion.div initial={{ opacity: 0, scale: 1 }} animate={{x: [400, 0], opacity: 1, scale: 1 }} transition={{duration: 0.5, delay: 1}} className="h-1/3 text-center py-1" style={{margin: "0 auto", display: 'table',  top: '0', left: '0'}}>
                                     <div className="px-5 py-1" onClick={()=>invite_to_game()} style={{borderRadius: '10px', backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', display: 'table-cell', verticalAlign: 'middle'}}>
                                         <motion.div animate={{rotate: [0, 4, -4, 0]}} transition={{duration: 1, repeat: Infinity, repeatDelay: Math.random() * 5 +4}}> Пригласить друга</motion.div>   
                                     </div>
