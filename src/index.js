@@ -145,7 +145,7 @@ function particle(type) {
         timeline
           .to(element, { y: ( size_l*0.85), duration: Math.random() * 5 + 5})
           .to(element, {borderRadius:'50%', duration:0.01})
-          .to(element, { y: elem_to_particle_height, scale: 0.8, duration:0.05,onComplete: function() {document.getElementById("particle"+id_n).remove()} });
+          .to(element, { y: elem_to_particle_height, scale: 0.8, opacity:0, duration:0.5,onComplete: function() {document.getElementById("particle"+id_n).remove()} });
     }
     
 }
