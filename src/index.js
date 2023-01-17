@@ -80,7 +80,12 @@ function particle(type) {
     if(type == 'game'){
         var selected_color = Math.round(Math.random()* Number(this.state.color_array.length - 1));
         let elem_to_particle = document.getElementById('color_'+selected_color)
-        var position = elem_to_particle.getBoundingClientRect();
+        if(this.state.game_state == 'game'){
+            var position = elem_to_particle.getBoundingClientRect();
+        }
+        else{
+            return
+        }
         var elem_to_particle_x = position.left;
         var elem_to_particle_y = position.top;
         var elem_to_particle_height = position.height;
@@ -98,8 +103,16 @@ function particle(type) {
           yoyo: false,
           defaults: { ease: ("custom", "M0,0 C0.266,0.412 0.691,0.209 0.82,0.33 0.822,0.332 0.856,0.406 0.858,0.412 0.888,0.506 0.791,1 1,1 ") }
         });
+        
         timeline
-          .to(element, { y: - ((diment['height']/3)*((size_l/(bigger_d*0.1)))),opacity: 0,scale: [1.5, 0], duration: Math.random() * 4 + 2 , onComplete: function() {document.getElementById("particle_"+id_n).remove()}});
+        .to(element, { y: - ((diment['height']/3)*((size_l/(bigger_d*0.1)))),opacity: 0,scale: [1.5, 0], duration: Math.random() * 4 + 2 , onComplete: 
+            function() {
+                try{
+                    document.getElementById("particle_"+id_n).remove()
+                }
+                catch(e){
+                }}});
+        
     }
     else if(type == 'loose'){
         let size_l = Math.round(Math.random() * (diment['width']*0.08) + 20);
@@ -108,7 +121,12 @@ function particle(type) {
         let color_type = Math.round(Math.random());
         if(color_type == 0){
             let elem_to_particle = document.getElementById('end_game_next')
-            var position = elem_to_particle.getBoundingClientRect();
+            if(this.state.game_state == 'loose'){        
+                var position = elem_to_particle.getBoundingClientRect();
+            }
+            else{
+                return
+            }
             var elem_to_particle_x = position.left;
             var elem_to_particle_y = position.top;
             var elem_to_particle_height = position.height;
@@ -122,7 +140,12 @@ function particle(type) {
         }
         else{
             let elem_to_particle = document.getElementById('target_color')
-            var position = elem_to_particle.getBoundingClientRect();
+            if(this.state.game_state == 'loose'){
+                var position = elem_to_particle.getBoundingClientRect();
+            }
+            else{
+                return
+            }
             var elem_to_particle_x = position.left;
             var elem_to_particle_y = position.top;
             var elem_to_particle_height = position.height;
@@ -144,7 +167,12 @@ function particle(type) {
         timeline
           .to(element, { y: ( size_l*0.85), duration: Math.random() * 5 + 5})
           .to(element, {borderRadius:'50%', duration:0.01})
-          .to(element, { y: elem_to_particle_height, scale: 0.8, opacity:0, duration:0.5,onComplete: function() {document.getElementById("particle_"+id_n).remove()} });
+          .to(element, { y: elem_to_particle_height, scale: 0.8, opacity:0, duration:0.5,onComplete: 
+            function() {
+                try{document.getElementById("particle_"+id_n).remove()}catch(e){
+                }
+
+            } });
     }
     
 }
@@ -159,9 +187,9 @@ function colors_div_block(){
                     <motion.div id="colors" className=" h-full w-full flex flex-row place-content-center" >
                         {this.state.colors_id.map(color => 
                             <motion.div whileHover={{ scale: 0.98 }} whileTap={{ scale: 0.95 }} key={color} id={'color_'+color} onClick={()=>this.check_answer(this.state.color_array[color])}  className=" p-0 m-0 h-full" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', 'width':'100%'}}> 
-                            <div className=" w-full h-1/6">
-                                <div id='colb_top' className="relative w-full h-1/3 bg-blue-400" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', borderRadius: '100% / 100%', top: '-17%'}}> 
-                                    <div id='colb_top_inside' className="relative w-full h-full w-11/12 bg-blue-400" style={{margin: '0 auto', backgroundColor:'rgb('
+                            <div className=" w-full h-1/6" onClick={()=>this.check_answer(this.state.color_array[color])}>
+                                <div onClick={()=>this.check_answer(this.state.color_array[color])} id='colb_top' className="relative w-full h-1/3 bg-blue-400" style={{backgroundColor:'rgb('+this.state.color_array[color][1][0]+', '+this.state.color_array[color][1][1]+', '+this.state.color_array[color][1][2]+')', borderRadius: '100% / 100%', top: '-17%'}}> 
+                                    <div onClick={()=>this.check_answer(this.state.color_array[color])} id='colb_top_inside' className="relative w-full h-full w-11/12 bg-blue-400" style={{margin: '0 auto', backgroundColor:'rgb('
                                     + this.state.color_array[color][1][0]*0.7+
                                     ', '+this.state.color_array[color][1][1]*0.7+
                                     ', '+this.state.color_array[color][1][2]*0.7+
@@ -196,10 +224,15 @@ function colors_div_block(){
                         </div>
                     </div>
                 </div>
+                <div id='timer' className="absolute top-0 left-0 bg-blue-400 rounded-full" style={{width: '8%', aspectRatio: '1 / 1'}}>
+                Timer
+                </div>
             </div>
         );
     } finally{
         dlt_prtcles('particle_');
+        this.state.need_timer = 1;
+        startTimer(5);
         var particles_main = setInterval(function(){   
             let game_state = game_state_checker();
             if( game_state != 'game'){
@@ -213,7 +246,6 @@ function colors_div_block(){
 function dlt_prtcles(pattern){
     let elements = document.querySelectorAll('[id^="'+pattern+'"]');
     for(let i = 0; i < elements.length; i ++){ 
-        console.log(elements[i]);
         document.getElementById(elements[i].id).remove()
     }
 }
@@ -249,7 +281,7 @@ function game_over_div_block(){
                             <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                                 <div id="what_prsd_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
                                     <div id = "text_selected_color"style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                                        <div className="w-full h-1/2"  id="what_pressed">Вы выбрали: {this.state.presed_color[0]}</div>
+                                        <div className="w-full h-1/2"  id="what_pressed">{this.state.presed_color[0]}</div>
                                     </div>
                                 </div>
                             </div>
@@ -382,6 +414,32 @@ function dlt_particles(id){
     this.state.particles = arr;
 }
 
+
+function countDown() {
+    console.log(this.state.timer_s_left);
+    let seconds = this.state.timer_s_left - 1;
+    this.state.timer_s_left = seconds;
+    if (seconds == 0) { 
+        this.state.need_timer = 0;
+        console.log("We ended");
+        clearInterval(this.timer);
+        this.check_answer("No answer");
+    }
+    else if(this.state.need_timer == 0){
+        console.log("We ended2");
+        clearInterval(this.timer);
+    }
+}
+
+
+function startTimer(sec) {
+    console.log("We started");
+    this.state.timer_s_left = sec;
+    if ((this.state.timer_s_left > 0) && (this.state.need_timer == 1)) {
+        this.timer = setInterval(countDown, 1000);
+    }
+}
+
 class Game extends React.Component {
     constructor(props){
         super(props);
@@ -396,7 +454,12 @@ class Game extends React.Component {
             old_points_count: 0,
             play_try_count: 1,
             local_best_score: 0,
+            timer_s_left: 0,
+            need_timer: 0,
         };
+        
+        this.timer = 0;
+
         this.get_random_color = this.get_random_color.bind(this);
         this.check_answer = this.check_answer.bind(this);
         this.restart_game = this.restart_game.bind(this);
@@ -410,7 +473,9 @@ class Game extends React.Component {
         post_to_wall = post_to_wall.bind(this);
         particle = particle.bind(this);
         game_state_checker = game_state_checker.bind(this);
-        
+        countDown = countDown.bind(this);
+        startTimer = startTimer.bind(this);
+    
         this.state.color_array[0] = this.get_random_color(); 
         this.state.color_array[1] = this.get_random_color(); 
         this.state.true_color = arrayRandElement(this.state.color_array);
@@ -426,6 +491,7 @@ class Game extends React.Component {
 
 
     check_answer(presed_color){
+        this.state.need_timer = 0;
         if((presed_color === this.state.true_color) && ((this.state.points_count+1)%5==0)){
             this.setState(previousState => ({
                 color_array: [...previousState.color_array, this.get_random_color()],
@@ -439,6 +505,7 @@ class Game extends React.Component {
             )}));
         }
         else if(presed_color === this.state.true_color){
+            console.log(presed_color)
             this.setState(previousState => ({
                 points_count: this.state.points_count + 1,
                 game_state: 'points_up',
@@ -452,12 +519,26 @@ class Game extends React.Component {
             this.set_true_color();
             this.setState({game_state: 'game'});
         }
+        else if (presed_color == "No answer"){ 
+            if(this.state.points_count > this.state.local_best_score){
+                this.state.local_best_score = this.state.points_count;
+            }
+            let hui = ["Время вышло!", [this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2]]];
+            this.state.presed_color = hui;
+            this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], old_points_count: this.state.points_count, points_count:0, game_state: 'loose',  play_try_count: this.state.play_try_count+1, presed_color: this.state.presed_color});
+            if(((this.state.play_try_count)%3 == 0) && (this.state.play_try_count != 0)){
+                console.log('AD NOW');
+                bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+                .then(data => console.log(data.result))
+                .catch(error => console.log(error));
+            }
+        }
         else{ 
             if(this.state.points_count > this.state.local_best_score){
                 this.state.local_best_score = this.state.points_count;
             }
+            presed_color[0] = "Был выбран:\n " + presed_color[0];
             this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], old_points_count: this.state.points_count, points_count:0, game_state: 'loose', presed_color: presed_color,  play_try_count: this.state.play_try_count+1});
-            console.log('PLAY try count: ', this.state.play_try_count);
             if(((this.state.play_try_count)%3 == 0) && (this.state.play_try_count != 0)){
                 console.log('AD NOW');
                 bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
