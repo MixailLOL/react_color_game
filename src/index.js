@@ -224,15 +224,20 @@ function colors_div_block(){
                         </div>
                     </div>
                 </div>
-                <div id='timer' className="absolute top-0 left-0 bg-blue-400 rounded-full" style={{width: '8%', aspectRatio: '1 / 1'}}>
-                Timer
+
+                <div id='timer' className="absolute top-2 left-2" style={{width: '8%', aspectRatio: '1 / 1'}}>
+                    <div id="activeBorder" style={{ display: 'table', textAlign: 'center', position: 'absolute', textAlign: 'center', width: '100%', aspectRatio: '1 / 1', borderRadius: '100%', backgroundColor:'#39B4CC', backgroundImage: 'linear-gradient(91deg, transparent 50%, #A2ECFB 50%), linear-gradient(90deg, #A2ECFB 50%, transparent 50%)'}}>
+                        <div id="circle" style={{display: 'table-cell', textAlign: 'center', verticalAlign: 'middle', aspectRatio: '1 / 1'}}>
+                            <div style={{display: 'inline-block'}} id='pcnt_text'></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
     } finally{
         dlt_prtcles('particle_');
         this.state.need_timer = 1;
-        startTimer(5);
+        startTimer();
         var particles_main = setInterval(function(){   
             let game_state = game_state_checker();
             if( game_state != 'game'){
@@ -243,6 +248,56 @@ function colors_div_block(){
     };
 }
 
+function draw_sector(prec) {
+    let active_border = document.getElementById('activeBorder');
+    if(this.state.game_state == 'game'){
+        document.getElementById('pcnt_text').textContent = this.state.timer_s_left;
+    }
+    else{
+        return
+    }
+    if (prec > 100)
+        prec = 100;
+    var deg = prec*3.6;
+    if (deg <= 180){
+        active_border.style.backgroundImage = ('linear-gradient(' + (90+deg) + 'deg, transparent 50%, #A2ECFB 50%),linear-gradient(90deg, #A2ECFB 50%, transparent 50%)');
+    }
+    else{
+        active_border.style.backgroundImage = ('linear-gradient(' + (deg-90) + 'deg, transparent 50%, #39B4CC 50%),linear-gradient(90deg, #A2ECFB 50%, transparent 50%)');
+    }
+}
+
+function countDown() {
+    console.log("time left", this.state.timer_s_left);
+    let seconds = this.state.timer_s_left - 1;
+    let prec = 100 - Math.round(((Number(this.state.timer_s_left)*100)/this.state.timer_max_time));
+    draw_sector(prec);
+    this.state.timer_s_left = seconds;
+    if (seconds == -1) { 
+        this.state.need_timer = 0;
+        console.log("We ended cs NO ANSWER");
+        clearInterval(this.timer);
+        this.timer = 0;
+        this.check_answer("No answer");
+    }
+    else if(this.state.need_timer == 0){
+        console.log("We ended cs DNT NEED TIMER");
+        clearInterval(this.timer);
+        this.timer = 0;
+    }
+}
+
+
+function startTimer() {
+    console.log("We started yeling timer");
+    console.log("timer =",this.timer);
+    this.state.timer_s_left = this.state.timer_max_time;
+    if ((this.state.timer_s_left > 0) && (this.state.need_timer == 1) && (this.timer == 0)) {
+        console.log("We starte timer");
+        this.timer = setInterval(countDown, 1000);
+        console.log(" Now timer =",this.timer);
+    }
+}
 function dlt_prtcles(pattern){
     let elements = document.querySelectorAll('[id^="'+pattern+'"]');
     for(let i = 0; i < elements.length; i ++){ 
@@ -414,32 +469,6 @@ function dlt_particles(id){
     this.state.particles = arr;
 }
 
-
-function countDown() {
-    console.log(this.state.timer_s_left);
-    let seconds = this.state.timer_s_left - 1;
-    this.state.timer_s_left = seconds;
-    if (seconds == 0) { 
-        this.state.need_timer = 0;
-        console.log("We ended");
-        clearInterval(this.timer);
-        this.check_answer("No answer");
-    }
-    else if(this.state.need_timer == 0){
-        console.log("We ended2");
-        clearInterval(this.timer);
-    }
-}
-
-
-function startTimer(sec) {
-    console.log("We started");
-    this.state.timer_s_left = sec;
-    if ((this.state.timer_s_left > 0) && (this.state.need_timer == 1)) {
-        this.timer = setInterval(countDown, 1000);
-    }
-}
-
 class Game extends React.Component {
     constructor(props){
         super(props);
@@ -456,6 +485,7 @@ class Game extends React.Component {
             local_best_score: 0,
             timer_s_left: 0,
             need_timer: 0,
+            timer_max_time: 30,
         };
         
         this.timer = 0;
@@ -475,7 +505,7 @@ class Game extends React.Component {
         game_state_checker = game_state_checker.bind(this);
         countDown = countDown.bind(this);
         startTimer = startTimer.bind(this);
-    
+        draw_sector = draw_sector.bind(this);
         this.state.color_array[0] = this.get_random_color(); 
         this.state.color_array[1] = this.get_random_color(); 
         this.state.true_color = arrayRandElement(this.state.color_array);
@@ -505,7 +535,6 @@ class Game extends React.Component {
             )}));
         }
         else if(presed_color === this.state.true_color){
-            console.log(presed_color)
             this.setState(previousState => ({
                 points_count: this.state.points_count + 1,
                 game_state: 'points_up',
@@ -537,7 +566,7 @@ class Game extends React.Component {
             if(this.state.points_count > this.state.local_best_score){
                 this.state.local_best_score = this.state.points_count;
             }
-            presed_color[0] = "Был выбран:\n " + presed_color[0];
+            presed_color[0] = "Вы выбрали:\n " + presed_color[0];
             this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], old_points_count: this.state.points_count, points_count:0, game_state: 'loose', presed_color: presed_color,  play_try_count: this.state.play_try_count+1});
             if(((this.state.play_try_count)%3 == 0) && (this.state.play_try_count != 0)){
                 console.log('AD NOW');
