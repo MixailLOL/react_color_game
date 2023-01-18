@@ -317,7 +317,7 @@ function points_div_block(){
                 <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                     <div id="good_answer_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
                         <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                            <motion.div transition={{duration: 0.8, delay: 0.1, ease: [0, 0.71, 0.2, 1.01]}} initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} id="good_aswer" className="w-full h-full "  ><p>Отлично!</p><p>Очки++</p><p>{this.state.true_color[0]}</p></motion.div>
+                            <motion.div transition={{duration: 0.8, delay: 0.1, ease: [0, 0.71, 0.2, 1.01]}} initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} id="good_aswer" className="w-full h-full "  ><p>Отлично!</p><p>Очки++</p><p>{this.state.true_color[0]}</p><p>Таймер {this.state.timer_s_left} + 5</p></motion.div>
                         </div>
                     </div>
                 </div>
@@ -485,7 +485,7 @@ class Game extends React.Component {
             local_best_score: 0,
             timer_s_left: 0,
             need_timer: 0,
-            timer_max_time: 30,
+            timer_max_time: 20,
         };
         
         this.timer = 0;
@@ -535,6 +535,7 @@ class Game extends React.Component {
             )}));
         }
         else if(presed_color === this.state.true_color){
+            this.state.timer_max_time = 5 + Math.round(this.state.timer_s_left);
             this.setState(previousState => ({
                 points_count: this.state.points_count + 1,
                 game_state: 'points_up',
@@ -583,6 +584,7 @@ class Game extends React.Component {
     }
 
     restart_game(){
+        this.state.timer_max_time = 20;
         this.set_true_color();
         this.setState({game_state: 'game'});
     }
