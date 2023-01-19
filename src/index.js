@@ -231,18 +231,19 @@ function colors_div_block(){
             +this.state.timer_colors[0][1][2]+') 50%, transparent 50%)'}}>
                         <div id="circle" style={{display: 'table-cell', textAlign: 'center', verticalAlign: 'middle', aspectRatio: '1 / 1'}}>
                             <div style={{display: 'inline-block'}} id='pcnt_text'></div>
-                            <div className="flex flex-row text-center place-content-center">
-                                        <div>
-                                            Очки:
-                                        </div>
-                                        <div id="good_answers_counter">
-                                            {this.state.points_count}
-                                        </div>
-                                    </div>
                         </div>
                     </div>
+                    <div className=" absalute flex flex-row text-center place-content-center" style={{width:'100%', height: '100%', marginTop: '100%'}}>
+                                <div>
+                                    Очки:
+                                </div>
+                                <div id="good_answers_counter" >
+                                    {this.state.points_count}
+                                </div>
+                            </div>
                 </div>
             </div>
+
         );
     } finally{
         dlt_prtcles('particle_');
