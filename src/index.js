@@ -323,8 +323,8 @@ function expand_block(color){
           defaults: { ease: ("custom", "M0,0 C0,0 0.507,-0.008 0.742,0.226 1.005,0.489 1,1 1,1 ") }
         });
         
-        timeline.to(element,{scale:30, duration:1, onComplete:function(){change_state_from_expnd()} })
-        .to(element, {scale:0, opacity: 0, duration:1, onComplete:function(){ dlt_prtcles('expanded_div')}});
+        timeline.to(element,{scale:30, duration:0.7, onComplete:function(){change_state_from_expnd()} })
+        .to(element, {opacity: 0, duration:0.3, onComplete:function(){ dlt_prtcles('expanded_div')}});
 }
 
 function change_state_from_expnd(){
