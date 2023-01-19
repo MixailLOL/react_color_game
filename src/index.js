@@ -211,7 +211,27 @@ function colors_div_block(){
                                     <div id='color_name'>
                                         {this.state.true_color[0]}
                                     </div>
-                                    <div className="flex flex-row text-center place-content-center">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id='timer' className="absolute top-2 left-2" style={{width: '10%', aspectRatio: '1 / 1'}}>
+                    <div id="activeBorder" style={{ display: 'table', textAlign: 'center', position: 'absolute', textAlign: 'center', width: '100%', aspectRatio: '1 / 1', borderRadius: '100%', backgroundColor:'rgb('+
+                    this.state.timer_colors[1][1][0]+', '+
+            this.state.timer_colors[1][1][1]+','
+            +this.state.timer_colors[1][1][2]+')', backgroundImage: 'linear-gradient(91deg, transparent 50%, rgb('+
+            this.state.timer_colors[0][1][0]+', '+
+            this.state.timer_colors[0][1][1]+','
+            +this.state.timer_colors[0][1][2]+') 50%), linear-gradient(90deg, rgb('+
+            this.state.timer_colors[0][1][0]+', '+
+            this.state.timer_colors[0][1][1]+','
+            +this.state.timer_colors[0][1][2]+') 50%, transparent 50%)'}}>
+                        <div id="circle" style={{display: 'table-cell', textAlign: 'center', verticalAlign: 'middle', aspectRatio: '1 / 1'}}>
+                            <div style={{display: 'inline-block'}} id='pcnt_text'></div>
+                            <div className="flex flex-row text-center place-content-center">
                                         <div>
                                             Очки:
                                         </div>
@@ -219,16 +239,6 @@ function colors_div_block(){
                                             {this.state.points_count}
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id='timer' className="absolute top-2 left-2" style={{width: '8%', aspectRatio: '1 / 1'}}>
-                    <div id="activeBorder" style={{ display: 'table', textAlign: 'center', position: 'absolute', textAlign: 'center', width: '100%', aspectRatio: '1 / 1', borderRadius: '100%', backgroundColor:'#39B4CC', backgroundImage: 'linear-gradient(91deg, transparent 50%, #A2ECFB 50%), linear-gradient(90deg, #A2ECFB 50%, transparent 50%)'}}>
-                        <div id="circle" style={{display: 'table-cell', textAlign: 'center', verticalAlign: 'middle', aspectRatio: '1 / 1'}}>
-                            <div style={{display: 'inline-block'}} id='pcnt_text'></div>
                         </div>
                     </div>
                 </div>
@@ -248,10 +258,24 @@ function colors_div_block(){
     };
 }
 
+function set_timer_color(){
+    this.state.timer_colors[0] = arrayRandElement(this.state.color_array);
+    do{
+        this.state.timer_colors[1] = arrayRandElement(this.state.color_array);
+
+    }while(this.state.timer_colors[0] == this.state.timer_colors[1]);
+    console.log(this.state.timer_colors)
+}
+
 function draw_sector(prec) {
     let active_border = document.getElementById('activeBorder');
     if(this.state.game_state == 'game'){
+        try{
         document.getElementById('pcnt_text').textContent = this.state.timer_s_left;
+        }
+        catch(e){
+            return
+        }
     }
     else{
         return
@@ -260,10 +284,22 @@ function draw_sector(prec) {
         prec = 100;
     var deg = prec*3.6;
     if (deg <= 180){
-        active_border.style.backgroundImage = ('linear-gradient(' + (90+deg) + 'deg, transparent 50%, #A2ECFB 50%),linear-gradient(90deg, #A2ECFB 50%, transparent 50%)');
+        active_border.style.backgroundImage = ('linear-gradient(' + (90+deg) + 'deg, transparent 50%, rgb('+
+            this.state.timer_colors[0][1][0]+', '+
+            this.state.timer_colors[0][1][1]+','
+            +this.state.timer_colors[0][1][2]+') 50%),linear-gradient(90deg, rgb('+
+            this.state.timer_colors[0][1][0]+', '+
+            this.state.timer_colors[0][1][1]+','
+            +this.state.timer_colors[0][1][2]+') 50%, transparent 50%)');
     }
     else{
-        active_border.style.backgroundImage = ('linear-gradient(' + (deg-90) + 'deg, transparent 50%, #39B4CC 50%),linear-gradient(90deg, #A2ECFB 50%, transparent 50%)');
+        active_border.style.backgroundImage = ('linear-gradient(' + (deg-90) + 'deg, transparent 50%, rgb('+
+            this.state.timer_colors[1][1][0]+', '+
+            this.state.timer_colors[1][1][1]+','
+            +this.state.timer_colors[1][1][2]+') 50%),linear-gradient(90deg, rgb('+
+            this.state.timer_colors[0][1][0]+', '+
+            this.state.timer_colors[0][1][1]+','
+            +this.state.timer_colors[0][1][2]+') 50%, transparent 50%)');
     }
 }
 
@@ -290,6 +326,7 @@ function countDown() {
 function startTimer() {
     this.state.timer_s_left = this.state.timer_max_time;
     if ((this.state.timer_s_left > 0) && (this.state.need_timer == 1) && (this.timer == 0)) {
+        draw_sector(100);
         this.timer = setInterval(countDown, 1000);
     }
 }
@@ -513,6 +550,7 @@ class Game extends React.Component {
             need_timer: 0,
             timer_max_time: 20,
             click_coord:[],
+            timer_colors:[],
         };
         
         this.timer = 0;
@@ -535,6 +573,8 @@ class Game extends React.Component {
         draw_sector = draw_sector.bind(this);
         expand_block = expand_block.bind(this);
         change_state_from_expnd = change_state_from_expnd.bind(this);
+        set_timer_color = set_timer_color.bind(this);
+        
 
         this.state.color_array[0] = this.get_random_color(); 
         this.state.color_array[1] = this.get_random_color(); 
@@ -621,6 +661,7 @@ class Game extends React.Component {
     set_true_color(){
         let color = arrayRandElement(this.state.color_array);
         this.state.true_color = color;
+        set_timer_color();
     }
 
     restart_game(){
