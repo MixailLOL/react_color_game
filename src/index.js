@@ -311,7 +311,7 @@ function expand_block(color){
         color[1][0]+
         ', '+color[1][1]+
         ', '+color[1][2]+
-        ')'+'; width: 1%; aspect-ratio: 1/ 1; top:'+
+        ')'+'; width: 5%; aspect-ratio: 1/ 1; top:'+
         this.state.click_coord[1]+'px; left:'+
         this.state.click_coord[0]+'px;');
     element.setAttribute('class','absolute rounded-full');
@@ -320,10 +320,10 @@ function expand_block(color){
     const timeline = gsap.timeline({
           repeat: 0,
           yoyo: false,
-          defaults: { ease: ("custom", "M0,0 C0.266,0.412 0.691,0.209 0.82,0.33 0.822,0.332 0.856,0.406 0.858,0.412 0.888,0.506 0.791,1 1,1 ") }
+          defaults: { ease: 'Power0.easeNone' }
         });
         
-        timeline.to(element,{scale: 400, duration:0.50, onComplete:function(){change_state_from_expnd()} })
+        timeline.to(element,{scale: 500, duration:0.60, onComplete:function(){change_state_from_expnd()} })
         .to(element, {scale:0, opacity: 0, onComplete:function(){ dlt_prtcles('expanded_div')}});
 }
 
