@@ -316,14 +316,14 @@ function expand_block(color){
         this.state.click_coord[0]+'px;');
     element.setAttribute('class','absolute rounded-full');
     element.setAttribute('id','expanded_div');
-    document.getElementById('main_div').append(element);
+    document.getElementById('main_div').after(element);
     const timeline = gsap.timeline({
           repeat: 0,
           yoyo: false,
           defaults: { ease: ("custom", "M0,0 C0.266,0.412 0.691,0.209 0.82,0.33 0.822,0.332 0.856,0.406 0.858,0.412 0.888,0.506 0.791,1 1,1 ") }
         });
         
-        timeline.to(element,{scale: 300, duration: 0.5, onComplete:function(){change_state_from_expnd()} })
+        timeline.to(element,{scale: 400, duration:0.50, onComplete:function(){change_state_from_expnd()} })
         .to(element, {scale:0, opacity: 0, onComplete:function(){ dlt_prtcles('expanded_div')}});
 }
 
