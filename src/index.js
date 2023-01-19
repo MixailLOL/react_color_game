@@ -323,7 +323,7 @@ function expand_block(color){
           defaults: { ease: 'Power0.easeNone' }
         });
         
-        timeline.to(element,{scale: 500, duration:0.60, onComplete:function(){change_state_from_expnd()} })
+        timeline.to(element,{scale: 550, duration:0.60, onComplete:function(){change_state_from_expnd()} })
         .to(element, {scale:0, opacity: 0, onComplete:function(){ dlt_prtcles('expanded_div')}});
 }
 
