@@ -311,7 +311,7 @@ function expand_block(color){
         color[1][0]+
         ', '+color[1][1]+
         ', '+color[1][2]+
-        ')'+'; width: 5%; aspect-ratio: 1/ 1; top:'+
+        ')'+'; width: 15%; aspect-ratio: 1/ 1; top:'+
         this.state.click_coord[1]+'px; left:'+
         this.state.click_coord[0]+'px;');
     element.setAttribute('class','absolute rounded-full');
@@ -320,11 +320,11 @@ function expand_block(color){
     const timeline = gsap.timeline({
           repeat: 0,
           yoyo: false,
-          defaults: { ease: 'Power0.easeNone' }
+          defaults: { ease: ("custom", "M0,0 C0,0 0.507,-0.008 0.742,0.226 1.005,0.489 1,1 1,1 ") }
         });
         
-        timeline.to(element,{scale: 550, duration:0.60, onComplete:function(){change_state_from_expnd()} })
-        .to(element, {scale:0, opacity: 0, onComplete:function(){ dlt_prtcles('expanded_div')}});
+        timeline.to(element,{scale:30, duration:1, onComplete:function(){change_state_from_expnd()} })
+        .to(element, {scale:0, opacity: 0, duration:1, onComplete:function(){ dlt_prtcles('expanded_div')}});
 }
 
 function change_state_from_expnd(){
@@ -343,7 +343,7 @@ function points_div_block(){
                 <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                     <div id="good_answer_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
                         <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                            <motion.div transition={{duration: 0.8, delay: 0.1, ease: [0, 0.71, 0.2, 1.01]}} initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} id="good_aswer" className="w-full h-full "  ><p>Отлично!</p><p>Очки++</p><p>{this.state.true_color[0]}</p><p>Таймер {this.state.timer_s_left} + 5</p></motion.div>
+                            <motion.div transition={{duration: 0.5, delay: 0.1, ease: [0, 0.71, 0.2, 1.01]}} initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} id="good_aswer" className="w-full h-full "  ><p>Отлично!</p><p>Очки++</p><p>{this.state.true_color[0]}</p><p>Таймер {this.state.timer_s_left} + 5</p></motion.div>
                         </div>
                     </div>
                 </div>
