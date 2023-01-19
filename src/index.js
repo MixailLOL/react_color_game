@@ -181,7 +181,7 @@ function particle(type) {
 function colors_div_block(){
     try{
         return(
-            <div className = "w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
+            <div id="main_div" className = "w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
                 
                 <div id="colors_to_choice" className="top-1/3 h-2/3 w-full absolute">
                     <motion.div id="colors" className=" h-full w-full flex flex-row place-content-center" >
@@ -305,25 +305,18 @@ function game_state_checker(){
     return game_state;
 }
 
-function expand_color_where_clck(){
-    try{
-        return(
-        <div id="expand_box" className="overflow-hidden absolute w-full h-full" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')'}}>\
-        </div>)
-    }finally{
-        var particles_gg = setInterval(function(){   
-            expand_block();
-            clearInterval(particles_gg);
-        }, 100);
-    }
-}
-
-function expand_block(){
+function expand_block(color){
     var element = document.createElement("div");
-    element.setAttribute('style','background-color: '+'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')'+'; width: 1%; aspect-ratio: 1/ 1; top:'+this.state.click_coord[1]+'px; left:'+this.state.click_coord[0]+'px;');
+    element.setAttribute('style','background-color: '+'rgb('+
+        color[1][0]+
+        ', '+color[1][1]+
+        ', '+color[1][2]+
+        ')'+'; width: 1%; aspect-ratio: 1/ 1; top:'+
+        this.state.click_coord[1]+'px; left:'+
+        this.state.click_coord[0]+'px;');
     element.setAttribute('class','absolute rounded-full');
     element.setAttribute('id','expanded_div');
-    document.getElementById('expand_box').prepend(element);
+    document.getElementById('main_div').append(element);
     const timeline = gsap.timeline({
           repeat: 0,
           yoyo: false,
@@ -331,7 +324,7 @@ function expand_block(){
         });
         
         timeline.to(element,{scale: 300, duration: 0.5, onComplete:function(){change_state_from_expnd()} })
-        .to(element, {scale:0});
+        .to(element, {scale:0, opacity: 0, onComplete:function(){ dlt_prtcles('expanded_div')}});
 }
 
 function change_state_from_expnd(){
@@ -340,7 +333,12 @@ function change_state_from_expnd(){
 
 function points_div_block(){
     return(
-        <div id="good_aswer_div" className="w-full h-screen select-none text-center text-4xl relative" style={{backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'width':'100%', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}} onClick={()=>this.check_answer('next')} >
+        <div id="good_aswer_div" className="w-full h-screen select-none text-center text-4xl relative" style={{backgroundColor:'rgb('+this.state.true_color[1][0]+
+        ', '+this.state.true_color[1][1]+
+        ', '+this.state.true_color[1][2]+
+        ')', 'width':'100%', fontFamily: 'Roboto, sans-serif', 'color': 
+        change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}} 
+        onClick={()=>this.check_answer("next")} >
             <div className="w-full h-full relative ">
                 <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                     <div id="good_answer_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
@@ -535,11 +533,8 @@ class Game extends React.Component {
         countDown = countDown.bind(this);
         startTimer = startTimer.bind(this);
         draw_sector = draw_sector.bind(this);
-        expand_color_where_clck = expand_color_where_clck.bind(this);
         expand_block = expand_block.bind(this);
         change_state_from_expnd = change_state_from_expnd.bind(this);
-        
-        this.expand_block_elem = React.createRef();
 
         this.state.color_array[0] = this.get_random_color(); 
         this.state.color_array[1] = this.get_random_color(); 
@@ -557,45 +552,39 @@ class Game extends React.Component {
 
     check_answer(presed_color, mouse_x, mouse_y){
         this.state.need_timer = 0;
-        console.log(mouse_x, mouse_y);
+        console.log("Data on check_answer(): ", presed_color);
         this.state.click_coord = [mouse_x, mouse_y];
-        if((presed_color === this.state.true_color) && ((this.state.points_count+1)%5==0)){
-            console.log("PRSD true color NEXT HARD LVL",this.state.game_state);
-            this.setState(previousState => ({
-                color_array: [...previousState.color_array, this.get_random_color()],
-                colors_id:[...previousState.colors_id, previousState.colors_id[previousState.colors_id.length-1]+1],
-                points_count: this.state.points_count + 1,
-                presed_color: presed_color
-            }));
-            this.setState(prevState => ({
-                color_array: prevState.color_array.map(
-                obj => (Object.assign(this.get_random_color()))
-            )}));
-            this.state.game_state = 'expand';;
+        if (presed_color == "next") {
+            if(((this.state.points_count+1)%5==0)){
+                console.log("PRSD true color NEXT HARD LVL",this.state.game_state);
+                this.setState(previousState => ({
+                    color_array: [...previousState.color_array, this.get_random_color()],
+                    colors_id:[...previousState.colors_id, previousState.colors_id[previousState.colors_id.length-1]+1],
+                    points_count: this.state.points_count + 1,
+                }));
+                this.setState(prevState => ({
+                    color_array: prevState.color_array.map(
+                    obj => (Object.assign(this.get_random_color()))
+                )}));
+            }
+            else{
+                console.log("next lvl is being created1:",this.state.true_color);
+                this.state.timer_max_time = 5 + Math.round(this.state.timer_s_left);
+                this.setState(prevState => ({
+                    points_count: this.state.points_count + 1,
+                    color_array: prevState.color_array.map(
+                    obj => (Object.assign(this.get_random_color()))
+                )}));    
+            }
+            this.setState({game_state: 'game'});
+            console.log("next lvl is being created2:",this.state.true_color);
         }
         else if(presed_color === this.state.true_color){
-            console.log("PRSD true color_1",this.state.game_state);
-            this.state.timer_max_time = 5 + Math.round(this.state.timer_s_left);
-            this.setState(previousState => ({
-                points_count: this.state.points_count + 1,
-                presed_color: presed_color,
-            }));
-            this.setState(prevState => ({
-                color_array: prevState.color_array.map(
-                obj => (Object.assign(this.get_random_color()))
-            )}));
-            this.state.game_state = 'expand';
-            console.log("PRSD true color_2",this.state.game_state);
+            expand_block(this.state.true_color);
         }
         else if(presed_color == 'points_up'){
-            console.log('Presed on expanded');
-            this.setState(({game_state: 'points_up'}));
-        }
-        
-        else if(this.state.game_state === 'points_up'){
-            console.log("POINTS UP",this.state.game_state);
-            this.set_true_color();
-            this.setState({game_state: 'game'});
+            console.log('Expand ended; points up call');
+            this.setState({game_state: 'points_up'});
         }
         else if (presed_color == "No answer"){ 
             console.log("time is up",this.state.game_state);
@@ -626,12 +615,12 @@ class Game extends React.Component {
                 .catch(error => console.log(error));
             }
         }
-        console.log(this.state.game_state)
+        console.log("In the end state:", this.state.game_state, "colors:", this.state.color_array);
     }
 
     set_true_color(){
         let color = arrayRandElement(this.state.color_array);
-        this.setState({true_color: color});
+        this.state.true_color = color;
     }
 
     restart_game(){
@@ -642,21 +631,20 @@ class Game extends React.Component {
 
     colors_to_choice(){
         if(this.state.game_state === 'loose'){
+            console.log("Lose state dtected");
             return(
                  game_over_div_block()
             )
         }
         else if(this.state.game_state === 'points_up'){
+            console.log("Points up state dtected");
             return(
                 points_div_block()
             )
         }
-        else if(this.state.game_state === 'expand'){
-            return(
-            expand_color_where_clck()
-            )
-        }
+        this.set_true_color();
         change_bg_color();
+        console.log("Game dtected");
         return(
             colors_div_block()
         )
