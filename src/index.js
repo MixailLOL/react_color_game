@@ -347,9 +347,12 @@ function game_state_checker(){
 
 function expand_block(color, event, x, y){
     var element = document.createElement("div");
+    console.log('color on expand:', color);
     if(x && y){
         this.state.click_coord = [x, y];
     }
+    let to_narrow_x = this.state.click_coord[0];
+    let to_narrow_y = this.state.click_coord[1];
     element.setAttribute('style','background-color: '+'rgb('+
         color[1][0]+
         ', '+color[1][1]+
@@ -368,15 +371,22 @@ function expand_block(color, event, x, y){
         
         timeline.to(element,{scale:30, duration:0.7, onComplete:function(){
             if(event == 'restart'){
-                change_state_from_expnd('restart'); 
+                dlt_prtcles('expanded_div');
+                narrow_div('restart', to_narrow_x, to_narrow_y);
+                setTimeout(()=>{change_state_from_expnd('restart');},100); 
             }else if(event == 'wrong_answer'){
+                dlt_prtcles('expanded_div');
+                console.log("pre narrow color: ",color);
+                narrow_div('wrong_answer', to_narrow_x, to_narrow_y, color);
                 change_state_from_expnd('wrong_answer'); 
             }
             else{
                 change_state_from_expnd('points_up');
             }} 
         })
-        .to(element, {opacity: 0, duration:0.3, onComplete:function(){ dlt_prtcles('expanded_div')}});
+        .to(element, {opacity: 0, duration:0.3, onComplete:function(){
+            dlt_prtcles('expanded_div');
+        }});
 }
 
 function change_state_from_expnd(state){
@@ -399,7 +409,7 @@ function points_div_block(){
             ', '+this.state.true_color[1][1]+
             ', '+this.state.true_color[1][2]+
             ')', 'width':'100%', fontFamily: 'Roboto, sans-serif', 'color': 
-            change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}} onClick={(event)=>narrow_div(event.clientX, event.clientY)} >
+            change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}} onClick={(event)=>narrow_div('next_lvl', event.clientX, event.clientY)} >
                 <div className="w-full h-full relative ">
                     <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
                         <div id="good_answer_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
@@ -414,16 +424,25 @@ function points_div_block(){
     )
 }
 
-function narrow_div(clck_x, clck_y){
-    console.log("clck x y ", clck_x, clck_y);
+function narrow_div(event, clck_x, clck_y, color){
+    console.log("Narrow ", event, clck_x, clck_y, color);
     let diment = getWindowDimensions();
     var element = document.createElement("div");
     element.setAttribute('id','narrow_div');
-    element.setAttribute('style','background-color: '+'rgb('+
+    if(event == 'wrong_answer'){
+        element.setAttribute('style','background-color: '+'rgb('+
+        color[1][0]+
+        ', '+color[1][1]+
+        ', '+color[1][2]+
+        ')'+'; width: 450%; aspect-ratio: 1/ 1; top:'+ Number(clck_y - diment.width*2.25)+'px; left:'+Number(clck_x- diment.width*2.25)+'px;');    
+    }
+    else{
+        element.setAttribute('style','background-color: '+'rgb('+
         this.state.true_color[1][0]+
         ', '+this.state.true_color[1][1]+
         ', '+this.state.true_color[1][2]+
         ')'+'; width: 450%; aspect-ratio: 1/ 1; top:'+ Number(clck_y - diment.width*2.25)+'px; left:'+Number(clck_x- diment.width*2.25)+'px;');
+    }
     element.setAttribute('class','absolute rounded-full');
     document.getElementById('box').after(element);
     const timeline = gsap.timeline({
@@ -431,7 +450,9 @@ function narrow_div(clck_x, clck_y){
           yoyo: false,
           defaults: { ease: ("custom", "M0,0 C0,0 0.507,-0.008 0.742,0.226 1.005,0.489 1,1 1,1 ") }
         });
-        this.check_answer("next");
+        if(event == 'next_lvl'){
+            this.check_answer("next");
+        }
         timeline.to(element,{scale: 0, duration:0.7, onComplete:function(){dlt_prtcles('narrow_div')}} );   
 }
 
@@ -676,21 +697,26 @@ class Game extends React.Component {
             this.setState({game_state: 'points_up'});
         }
         else if (presed_color == "No answer"){ 
-            console.log("time is up",this.state.game_state);
+            let diment = getWindowDimensions();
+            this.state.click_coord = [Number(diment.width*0.5),Number(diment.height*0.5)];
+            expand_block(this.state.true_color, 'wrong_answer', 0, 0);
+            console.log("time is up",this.state.game_state,"true_color ", this.state.true_color);
             if(this.state.points_count > this.state.local_best_score){
                 this.state.local_best_score = this.state.points_count;
             }
             let hui = ["Время вышло!", [this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2]]];
             this.state.presed_color = hui;
-            this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], old_points_count: this.state.points_count, points_count:0, game_state: 'loose',  play_try_count: this.state.play_try_count+1, presed_color: this.state.presed_color});
-            if(((this.state.play_try_count)%3 == 0) && (this.state.play_try_count != 0)){
-                console.log('AD NOW');
-                bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-                .then(data => console.log(data.result))
-                .catch(error => console.log(error));
-            }
+            setTimeout(() => {  
+                this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], old_points_count: this.state.points_count, points_count:0, game_state: 'loose',  play_try_count: this.state.play_try_count+1, presed_color: this.state.presed_color});
+                if(((this.state.play_try_count)%3 == 0) && (this.state.play_try_count != 0)){
+                    console.log('AD NOW');
+                    bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+                    .then(data => console.log(data.result))
+                    .catch(error => console.log(error));
+                }
+            }, 700);
         }
-        else{ 
+        else{
             expand_block(presed_color, 'wrong_answer');
             console.log("Wrong answer",this.state.game_state);
             if(this.state.points_count > this.state.local_best_score){
