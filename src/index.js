@@ -202,7 +202,7 @@ function colors_div_block(){
                 </div>
                 <div  id='text_area_lol' className=" relative w-full h-1/3 text-center text-4xl " > 
                     <div id='sub_erea_text' className="w-full h-full  ">
-                        <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
+                        <div className="absolute w-full h-full" style={{display: 'table',  top: '-10%', left: '0'}}>
                             <div style={{display: 'table-cell', verticalAlign: 'middle', zIndex: 99}} >
                                 <div id="test" style={{marginLeft: 'auto', marginRight: 'auto'}} >
                                     <div id="viberi_color" style={{fontSize: '80%'}}>
@@ -266,7 +266,6 @@ function set_timer_color(){
         this.state.timer_colors[1] = arrayRandElement(this.state.color_array);
 
     }while(this.state.timer_colors[0] == this.state.timer_colors[1]);
-    console.log(this.state.timer_colors)
 }
 
 function draw_sector(prec) {
@@ -312,13 +311,11 @@ function countDown() {
     this.state.timer_s_left = seconds;
     if (seconds == -1) { 
         this.state.need_timer = 0;
-        console.log("We ended cs NO ANSWER");
         clearInterval(this.timer);
         this.timer = 0;
         this.check_answer("No answer");
     }
     else if(this.state.need_timer == 0){
-        console.log("We ended cs DNT NEED TIMER");
         clearInterval(this.timer);
         this.timer = 0;
     }
@@ -346,7 +343,6 @@ function game_state_checker(){
 
 function expand_block(color, event, x, y){
     var element = document.createElement("div");
-    console.log('color on expand:', color);
     if(x && y){
         this.state.click_coord = [x, y];
     }
@@ -375,7 +371,6 @@ function expand_block(color, event, x, y){
                 setTimeout(()=>{change_state_from_expnd('restart');},100); 
             }else if(event == 'wrong_answer'){
                 dlt_prtcles('expanded_div');
-                console.log("pre narrow color: ",color);
                 narrow_div('wrong_answer', to_narrow_x, to_narrow_y, color);
                 change_state_from_expnd('wrong_answer'); 
             }
@@ -456,11 +451,10 @@ function good_answer_anim(){
     .to(timer_sum,{scale: 1.2, duration:0.4}, 0.4)
     .to(timer_sum,{scale: 1, duration:0.4, onComplete:function(){timer_sum.innerHTML = ("Таймер: "+time)}}, 0.8)
     .to(timer_sum,{opacity: 0, duration:1}, 1.8)
-    .to(true_clr_div,{y:'-75%', opacity: 1,duration:1}); 
+    .to(true_clr_div,{y:'-75%', opacity:1 ,duration:1}); 
 }
 
 function narrow_div(event, clck_x, clck_y, color){
-    console.log("Narrow ", event, clck_x, clck_y, color);
     let diment = getWindowDimensions();
     var element = document.createElement("div");
     element.setAttribute('id','narrow_div');
@@ -698,12 +692,9 @@ class Game extends React.Component {
 
     check_answer(presed_color, mouse_x, mouse_y){
         this.state.need_timer = 0;
-        console.log("Data on check_answer(): ", presed_color);
         this.state.click_coord = [mouse_x, mouse_y];
         if (presed_color == "next") {
             if(((this.state.points_count+1)%5==0)){
-                this.state.timer_max_time = 5 + Math.round(this.state.timer_s_left);
-                console.log("PRSD true color NEXT HARD LVL",this.state.game_state);
                 this.setState(previousState => ({
                     color_array: [...previousState.color_array, this.get_random_color()],
                     colors_id:[...previousState.colors_id, previousState.colors_id[previousState.colors_id.length-1]+1],
@@ -715,8 +706,6 @@ class Game extends React.Component {
                 }));
             }
             else{
-                console.log("next lvl is being created1:",this.state.true_color);
-                this.state.timer_max_time = 5 + Math.round(this.state.timer_s_left);
                 this.setState(prevState => ({
                     points_count: this.state.points_count + 1,
                     color_array: prevState.color_array.map(
@@ -724,20 +713,18 @@ class Game extends React.Component {
                 )}));    
             }
             this.setState({game_state: 'game'});
-            console.log("next lvl is being created2:",this.state.true_color);
         }
         else if(presed_color === this.state.true_color){
             expand_block(this.state.true_color);
         }
         else if(presed_color == 'points_up'){
-            console.log('Expand ended; points up call');
+            this.state.timer_max_time = Number(5 + Math.round(this.state.timer_s_left));
             this.setState({game_state: 'points_up'});
         }
         else if (presed_color == "No answer"){ 
             let diment = getWindowDimensions();
             this.state.click_coord = [Number(diment.width*0.5),Number(diment.height*0.5)];
             expand_block(this.state.true_color, 'wrong_answer', 0, 0);
-            console.log("time is up",this.state.game_state,"true_color ", this.state.true_color);
             if(this.state.points_count > this.state.local_best_score){
                 this.state.local_best_score = this.state.points_count;
             }
@@ -755,7 +742,6 @@ class Game extends React.Component {
         }
         else{
             expand_block(presed_color, 'wrong_answer');
-            console.log("Wrong answer",this.state.game_state);
             if(this.state.points_count > this.state.local_best_score){
                 this.state.local_best_score = this.state.points_count;
             }
@@ -771,7 +757,6 @@ class Game extends React.Component {
             }, 700);
             
         }
-        console.log("In the end state:", this.state.game_state, "colors:", this.state.color_array);
     }
 
     set_true_color(){
@@ -788,20 +773,17 @@ class Game extends React.Component {
 
     colors_to_choice(){
         if(this.state.game_state === 'loose'){
-            console.log("Lose state dtected");
             return(
                  game_over_div_block()
             )
         }
         else if(this.state.game_state === 'points_up'){
-            console.log("Points up state dtected");
             return(
                 points_div_block()
             )
         }
         this.set_true_color();
         change_bg_color();
-        console.log("Game dtected");
         return(
             colors_div_block()
         )
