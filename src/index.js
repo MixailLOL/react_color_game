@@ -345,8 +345,11 @@ function game_state_checker(){
     return game_state;
 }
 
-function expand_block(color, event){
+function expand_block(color, event, x, y){
     var element = document.createElement("div");
+    if(x && y){
+        this.state.click_coord = [x, y];
+    }
     element.setAttribute('style','background-color: '+'rgb('+
         color[1][0]+
         ', '+color[1][1]+
@@ -365,8 +368,11 @@ function expand_block(color, event){
         
         timeline.to(element,{scale:30, duration:0.7, onComplete:function(){
             if(event == 'restart'){
-                change_state_from_expnd('restart');
-            }else{
+                change_state_from_expnd('restart'); 
+            }else if(event == 'wrong_answer'){
+                change_state_from_expnd('wrong_answer'); 
+            }
+            else{
                 change_state_from_expnd('points_up');
             }} 
         })
@@ -379,6 +385,9 @@ function change_state_from_expnd(state){
     }
     else if(state == 'restart'){
         this.restart_game()
+    }
+    else{
+        return
     }
     
 }
@@ -465,7 +474,7 @@ function game_over_div_block(){
                                         </div>
                                         <div className="pt-3 pb-3 h-1/2 w-full">
                                             <motion.div animate={{scale: [1, 1.2, 1]}} transition={{duration: 0.5,ease: "easeInOut",repeat: Infinity,repeatDelay: 3}} 
-                                            onClick={(event)=>expand_block( this.state.true_color, 'restart')} className="h-full px-5"  
+                                            onClick={(event)=>expand_block( this.state.true_color, 'restart', event.clientX, event.clientY)} className="h-full px-5"  
                                             style={{ borderRadius: '20px',margin: "0 auto", display: 'table',  top: '0', left: '0', backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
                                                 <div  className="mt-2 w-full text-center h-2/3" style={{display: 'table-cell', verticalAlign: 'middle'}}>
                                                     <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
@@ -644,8 +653,8 @@ class Game extends React.Component {
                 }));
                 this.setState(prevState => ({
                     color_array: prevState.color_array.map(
-                    obj => (Object.assign(this.get_random_color()))
-                )}));
+                    obj => (Object.assign(this.get_random_color())))
+                }));
             }
             else{
                 console.log("next lvl is being created1:",this.state.true_color);
@@ -682,18 +691,22 @@ class Game extends React.Component {
             }
         }
         else{ 
+            expand_block(presed_color, 'wrong_answer');
             console.log("Wrong answer",this.state.game_state);
             if(this.state.points_count > this.state.local_best_score){
                 this.state.local_best_score = this.state.points_count;
             }
             presed_color[0] = "Вы выбрали:\n " + presed_color[0];
-            this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], old_points_count: this.state.points_count, points_count:0, game_state: 'loose', presed_color: presed_color,  play_try_count: this.state.play_try_count+1});
-            if(((this.state.play_try_count)%3 == 0) && (this.state.play_try_count != 0)){
-                console.log('AD NOW');
-                bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-                .then(data => console.log(data.result))
-                .catch(error => console.log(error));
-            }
+            setTimeout(() => {  
+                this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], old_points_count: this.state.points_count, points_count:0, game_state: 'loose', presed_color: presed_color,  play_try_count: this.state.play_try_count+1});
+                if(((this.state.play_try_count)%3 == 0) && (this.state.play_try_count != 0)){
+                    console.log('AD NOW');
+                    bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+                    .then(data => console.log(data.result))
+                    .catch(error => console.log(error));
+                } 
+            }, 700);
+            
         }
         console.log("In the end state:", this.state.game_state, "colors:", this.state.color_array);
     }
