@@ -181,7 +181,7 @@ function particle(type) {
 function colors_div_block(){
     try{
         return(
-            <div id="main_div" className = "w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
+            <div id="main_div" className = "overflow-hidden w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
                 
                 <div id="colors_to_choice" className="top-1/3 h-2/3 w-full absolute">
                     <motion.div id="colors" className=" h-full w-full flex flex-row place-content-center" >
@@ -234,13 +234,13 @@ function colors_div_block(){
                         </div>
                     </div>
                     <div className=" absalute flex flex-row text-center place-content-center" style={{width:'100%', height: '100%', marginTop: '100%'}}>
-                                <div>
-                                    Очки:
-                                </div>
-                                <div id="good_answers_counter" >
-                                    {this.state.points_count}
-                                </div>
-                            </div>
+                        <div>
+                            Очки:
+                        </div>
+                        <div id="good_answers_counter" >
+                            {this.state.points_count}
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -258,6 +258,7 @@ function colors_div_block(){
         }, Math.random()*600 + 200);
     };
 }
+
 
 function set_timer_color(){
     this.state.timer_colors[0] = arrayRandElement(this.state.color_array);
@@ -371,23 +372,45 @@ function change_state_from_expnd(){
 
 function points_div_block(){
     return(
-        <div id="good_aswer_div" className="w-full h-screen select-none text-center text-4xl relative" style={{backgroundColor:'rgb('+this.state.true_color[1][0]+
-        ', '+this.state.true_color[1][1]+
-        ', '+this.state.true_color[1][2]+
-        ')', 'width':'100%', fontFamily: 'Roboto, sans-serif', 'color': 
-        change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}} 
-        onClick={()=>this.check_answer("next")} >
-            <div className="w-full h-full relative ">
-                <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
-                    <div id="good_answer_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
-                        <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                            <motion.div transition={{duration: 0.5, delay: 0.1, ease: [0, 0.71, 0.2, 1.01]}} initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} id="good_aswer" className="w-full h-full "  ><p>Отлично!</p><p>Очки++</p><p>{this.state.true_color[0]}</p><p>Таймер {this.state.timer_s_left} + 5</p></motion.div>
+        <div id="box" className="w-full h-full relative overflow-hidden">
+            <div id="good_aswer_div" className="w-full h-screen select-none text-center text-4xl relative" style={{backgroundColor:'rgb('+this.state.true_color[1][0]+
+            ', '+this.state.true_color[1][1]+
+            ', '+this.state.true_color[1][2]+
+            ')', 'width':'100%', fontFamily: 'Roboto, sans-serif', 'color': 
+            change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}} onClick={(event)=>narrow_div(event.clientX, event.clientY)} >
+                <div className="w-full h-full relative ">
+                    <div className="absolute w-full h-full" style={{display: 'table',  top: '0', left: '0'}}>
+                        <div id="good_answer_out_div" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+                            <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                                <motion.div transition={{duration: 0.5, delay: 0.1, ease: [0, 0.71, 0.2, 1.01]}} initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} id="good_aswer" className="w-full h-full "  ><p>Отлично!</p><p>Очки++</p><p>{this.state.true_color[0]}</p><p>Таймер {this.state.timer_s_left} + 5</p></motion.div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>    
         </div>
     )
+}
+
+function narrow_div(clck_x, clck_y){
+    console.log("clck x y ", clck_x, clck_y);
+    let diment = getWindowDimensions();
+    var element = document.createElement("div");
+    element.setAttribute('id','narrow_div');
+    element.setAttribute('style','background-color: '+'rgb('+
+        this.state.true_color[1][0]+
+        ', '+this.state.true_color[1][1]+
+        ', '+this.state.true_color[1][2]+
+        ')'+'; width: 450%; aspect-ratio: 1/ 1; top:'+ Number(clck_y - diment.width*2.25)+'px; left:'+Number(clck_x- diment.width*2.25)+'px;');
+    element.setAttribute('class','absolute rounded-full');
+    document.getElementById('box').after(element);
+    const timeline = gsap.timeline({
+          repeat: 0,
+          yoyo: false,
+          defaults: { ease: ("custom", "M0,0 C0,0 0.507,-0.008 0.742,0.226 1.005,0.489 1,1 1,1 ") }
+        });
+        this.check_answer("next");
+        timeline.to(element,{scale: 0, duration:0.7, onComplete:function(){dlt_prtcles('narrow_div')}} );   
 }
 
 function game_over_div_block(){
@@ -575,6 +598,7 @@ class Game extends React.Component {
         expand_block = expand_block.bind(this);
         change_state_from_expnd = change_state_from_expnd.bind(this);
         set_timer_color = set_timer_color.bind(this);
+        narrow_div = narrow_div.bind(this);
         
 
         this.state.color_array[0] = this.get_random_color(); 
