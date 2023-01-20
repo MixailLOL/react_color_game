@@ -181,7 +181,8 @@ function particle(type) {
 function colors_div_block(){
     try{
         return(
-            <div id="main_div" className = "overflow-hidden w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
+            <div id="box" className = "overflow-hidden
+             w-full h-screen select-none" style={{backgroundColor:'rgb('+this.state.bg_color[0]+', '+this.state.bg_color[1]+', '+this.state.bg_color[2]+')', fontFamily: 'Roboto, sans-serif', 'color': change_txt_color(this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2])}}>
                 
                 <div id="colors_to_choice" className="top-1/3 h-2/3 w-full absolute">
                     <motion.div id="colors" className=" h-full w-full flex flex-row place-content-center" >
@@ -344,7 +345,7 @@ function game_state_checker(){
     return game_state;
 }
 
-function expand_block(color){
+function expand_block(color, event){
     var element = document.createElement("div");
     element.setAttribute('style','background-color: '+'rgb('+
         color[1][0]+
@@ -355,19 +356,31 @@ function expand_block(color){
         this.state.click_coord[0]+'px;');
     element.setAttribute('class','absolute rounded-full');
     element.setAttribute('id','expanded_div');
-    document.getElementById('main_div').after(element);
+    document.getElementById('box').after(element);
     const timeline = gsap.timeline({
           repeat: 0,
           yoyo: false,
           defaults: { ease: ("custom", "M0,0 C0,0 0.507,-0.008 0.742,0.226 1.005,0.489 1,1 1,1 ") }
         });
         
-        timeline.to(element,{scale:30, duration:0.7, onComplete:function(){change_state_from_expnd()} })
+        timeline.to(element,{scale:30, duration:0.7, onComplete:function(){
+            if(event == 'restart'){
+                change_state_from_expnd('restart');
+            }else{
+                change_state_from_expnd('points_up');
+            }} 
+        })
         .to(element, {opacity: 0, duration:0.3, onComplete:function(){ dlt_prtcles('expanded_div')}});
 }
 
-function change_state_from_expnd(){
-    this.check_answer('points_up');
+function change_state_from_expnd(state){
+    if(state == 'points_up'){
+        this.check_answer('points_up');
+    }
+    else if(state == 'restart'){
+        this.restart_game()
+    }
+    
 }
 
 function points_div_block(){
@@ -416,7 +429,7 @@ function narrow_div(clck_x, clck_y){
 function game_over_div_block(){
     try{
         return(
-            <div className = "w-full h-screen select-none"  style={{fontFamily: 'Roboto, sans-serif' }} >
+            <div id="box" className = "w-full h-screen select-none"  style={{fontFamily: 'Roboto, sans-serif' }} >
                 <div id="answer_div" className=" h-1/2 w-full " style={{backgroundColor:'rgb('+this.state.presed_color[1][0]+', '+this.state.presed_color[1][1]+', '+this.state.presed_color[1][2]+')', 'width':'100%', 'color': change_txt_color(this.state.presed_color[1][0], this.state.presed_color[1][1], this.state.presed_color[1][2])}}>
                     <div id = "sub_answer_div" className="flex flex-col h-full w-full text-center text-3xl">
                         <div className="w-full h-1/2 relative ">
@@ -451,7 +464,9 @@ function game_over_div_block(){
                                             <p>Рекорд: {this.state.local_best_score}</p>
                                         </div>
                                         <div className="pt-3 pb-3 h-1/2 w-full">
-                                            <motion.div animate={{scale: [1, 1.2, 1]}} transition={{duration: 0.5,ease: "easeInOut",repeat: Infinity,repeatDelay: 3}} onClick={()=>this.restart_game()} className="h-full px-5"  style={{ borderRadius: '20px',margin: "0 auto", display: 'table',  top: '0', left: '0', backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
+                                            <motion.div animate={{scale: [1, 1.2, 1]}} transition={{duration: 0.5,ease: "easeInOut",repeat: Infinity,repeatDelay: 3}} 
+                                            onClick={(event)=>expand_block( this.state.true_color, 'restart')} className="h-full px-5"  
+                                            style={{ borderRadius: '20px',margin: "0 auto", display: 'table',  top: '0', left: '0', backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
                                                 <div  className="mt-2 w-full text-center h-2/3" style={{display: 'table-cell', verticalAlign: 'middle'}}>
                                                     <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
                                                         <div className="h-2/3" >Начать занаво</div>
