@@ -625,7 +625,7 @@ function post_to_wall(){
 
 function add_app_event(value){
     console.log('addAppEvent_init');
-    bridge.send('addAppEvent',{user_id: this.state.user_id,activity_id: 2, value: value})
+    bridge.send('addAppEvent',{access_token: '98be54a898be54a898be54a8799bae63a8998be98be54a8fa5277b47cc403e32b2a2005' ,user_id: this.state.user_id,activity_id: 2, value: value})
       .then((data) => { 
         console.log(data);
       })
