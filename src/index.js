@@ -623,6 +623,21 @@ function post_to_wall(){
   });
 }
 
+function get_lauch_params(){
+    console.log('gl_prm_init');
+    bridge.send('VKWebAppGetLaunchParams')
+      .then((data) => { 
+        console.log(data);
+        this.state.user_id = data['detail']['data']['vk_user_id'];
+      })
+      .catch((error) => {
+        // Ошибка
+        console.log(error);
+      });
+      console.log('gl_prm_exit');
+
+}
+
 function dlt_particles(id){
     let arr = this.state.particles;
     let index = arr.indexOf(id);
@@ -649,6 +664,7 @@ class Game extends React.Component {
             timer_max_time: 20,
             click_coord:[],
             timer_colors:[],
+            user_id:0,
         };
         
         this.timer = 0;
@@ -674,13 +690,14 @@ class Game extends React.Component {
         set_timer_color = set_timer_color.bind(this);
         narrow_div = narrow_div.bind(this);
         good_answer_anim = good_answer_anim.bind(this);
-        
+        get_lauch_params = get_lauch_params.bind(this);
 
         this.state.color_array[0] = this.get_random_color(); 
         this.state.color_array[1] = this.get_random_color(); 
         this.state.true_color = arrayRandElement(this.state.color_array);
         change_bg_color();
-    }
+        get_lauch_params();
+        }
 
     get_random_color(){
         var color =  arrayRandElement(colors_data).slice(0);
