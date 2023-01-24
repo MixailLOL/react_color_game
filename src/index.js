@@ -623,19 +623,32 @@ function post_to_wall(){
   });
 }
 
+function add_app_event(value){
+    console.log('addAppEvent_init');
+    bridge.send('addAppEvent',{user_id: this.state.user_id,activity_id: 2, value: value})
+      .then((data) => { 
+        console.log(data);
+      })
+      .catch((error) => {
+        // Ошибка
+        console.log(error);
+      });
+      console.log('addAppEvent_exit');
+}
+
 function get_lauch_params(){
     console.log('gl_prm_init');
     bridge.send('VKWebAppGetLaunchParams')
       .then((data) => { 
         console.log(data);
         this.state.user_id = data['detail']['data']['vk_user_id'];
+        console.log(this.state.user_id);
       })
       .catch((error) => {
         // Ошибка
         console.log(error);
       });
       console.log('gl_prm_exit');
-
 }
 
 function dlt_particles(id){
@@ -691,6 +704,8 @@ class Game extends React.Component {
         narrow_div = narrow_div.bind(this);
         good_answer_anim = good_answer_anim.bind(this);
         get_lauch_params = get_lauch_params.bind(this);
+        add_app_event = add_app_event.bind(this);
+        
 
         this.state.color_array[0] = this.get_random_color(); 
         this.state.color_array[1] = this.get_random_color(); 
@@ -744,6 +759,7 @@ class Game extends React.Component {
             expand_block(this.state.true_color, 'wrong_answer', 0, 0);
             if(this.state.points_count > this.state.local_best_score){
                 this.state.local_best_score = this.state.points_count;
+                add_app_event(this.state.local_best_score);
             }
             let hui = ["Время вышло!", [this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2]]];
             this.state.presed_color = hui;
@@ -761,6 +777,7 @@ class Game extends React.Component {
             expand_block(presed_color, 'wrong_answer');
             if(this.state.points_count > this.state.local_best_score){
                 this.state.local_best_score = this.state.points_count;
+                add_app_event(this.state.local_best_score);
             }
             presed_color[0] = "Вы выбрали:\n " + presed_color[0];
             setTimeout(() => {  
