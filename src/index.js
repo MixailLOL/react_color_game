@@ -624,15 +624,17 @@ function post_to_wall(){
 }
 
 function add_app_event(value){
-    console.log('addAppEvent_init');
-    bridge.send('addAppEvent',{access_token: '98be54a898be54a898be54a8799bae63a8998be98be54a8fa5277b47cc403e32b2a2005' ,user_id: this.state.user_id,activity_id: 2, value: value})
-      .then((data) => { 
-        console.log(data);
-      })
-      .catch((error) => {
-        // Ошибка
-        console.log(error);
-      });
+    console.log('addAppEvent_init', value, this.state.user_id);
+    let url = 'https://api.vk.com/method/secure.addAppEvent?access_token=98be54a898be54a898be54a8799bae63a8998be98be54a8fa5277b47cc403e32b2a2005&user_id='+
+    this.state.user_id+'&activity_id=2&value='+value;
+
+    fetch(url).then(function(response) {
+      return response.json();
+    }).then(function(data) {
+      console.log(data);
+    }).catch(function(err) {
+      console.log('Fetch Error :-S', err);
+    });
       console.log('addAppEvent_exit');
 }
 
