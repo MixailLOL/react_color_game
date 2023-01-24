@@ -625,7 +625,7 @@ function post_to_wall(){
 
 function add_app_event(value){
     console.log('addAppEvent_init', value, this.state.user_id);
-    let url = 'https://api.vk.com/method/secure.addAppEvent?access_token=98be54a898be54a898be54a8799bae63a8998be98be54a8fa5277b47cc403e32b2a2005&user_id='+
+    let url = 'https://api.vk.com/method/secure.addAppEvent?access_token=&user_id='+
     this.state.user_id+'&activity_id=2&value='+value;
 
     fetch(url).then(function(response) {
@@ -713,7 +713,7 @@ class Game extends React.Component {
         this.state.color_array[1] = this.get_random_color(); 
         this.state.true_color = arrayRandElement(this.state.color_array);
         change_bg_color();
-        get_lauch_params();
+        //get_lauch_params();
         }
 
     get_random_color(){
@@ -761,7 +761,7 @@ class Game extends React.Component {
             expand_block(this.state.true_color, 'wrong_answer', 0, 0);
             if(this.state.points_count > this.state.local_best_score){
                 this.state.local_best_score = this.state.points_count;
-                add_app_event(this.state.local_best_score);
+                //add_app_event(this.state.local_best_score);
             }
             let hui = ["Время вышло!", [this.state.bg_color[0],this.state.bg_color[1],this.state.bg_color[2]]];
             this.state.presed_color = hui;
@@ -779,7 +779,7 @@ class Game extends React.Component {
             expand_block(presed_color, 'wrong_answer');
             if(this.state.points_count > this.state.local_best_score){
                 this.state.local_best_score = this.state.points_count;
-                add_app_event(this.state.local_best_score);
+                //add_app_event(this.state.local_best_score);
             }
             presed_color[0] = "Вы выбрали:\n " + presed_color[0];
             setTimeout(() => {  
