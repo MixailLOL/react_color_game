@@ -767,7 +767,7 @@ class Game extends React.Component {
             this.state.presed_color = hui;
             setTimeout(() => {  
                 this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], old_points_count: this.state.points_count, points_count:0, game_state: 'loose',  play_try_count: this.state.play_try_count+1, presed_color: this.state.presed_color});
-                if(((this.state.play_try_count)%3 == 0) && (this.state.play_try_count != 0)){
+                if(((this.state.play_try_count)%2 == 0) && (this.state.play_try_count != 0)){
                     console.log('AD NOW');
                     bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
                     .then(data => console.log(data.result))
@@ -784,7 +784,7 @@ class Game extends React.Component {
             presed_color[0] = "Вы выбрали:\n " + presed_color[0];
             setTimeout(() => {  
                 this.setState({color_array: [this.get_random_color(),this.get_random_color()], colors_id:[0, 1], old_points_count: this.state.points_count, points_count:0, game_state: 'loose', presed_color: presed_color,  play_try_count: this.state.play_try_count+1});
-                if(((this.state.play_try_count)%3 == 0) && (this.state.play_try_count != 0)){
+                if(((this.state.play_try_count)%2 == 0) && (this.state.play_try_count != 0)){
                     console.log('AD NOW');
                     bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
                     .then(data => console.log(data.result))
