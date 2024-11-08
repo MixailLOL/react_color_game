@@ -528,7 +528,7 @@ function game_over_div_block(){
                                             style={{ borderRadius: '20px',margin: "0 auto", display: 'table',  top: '0', left: '0', backgroundColor:'rgb('+this.state.true_color[1][0]+', '+this.state.true_color[1][1]+', '+this.state.true_color[1][2]+')', 'color': change_txt_color(this.state.true_color[1][0], this.state.true_color[1][1], this.state.true_color[1][2])}}>
                                                 <div  className="mt-2 w-full text-center h-2/3" style={{display: 'table-cell', verticalAlign: 'middle'}}>
                                                     <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                                                        <div className="h-2/3" >Начать занаво</div>
+                                                        <div className="h-2/3" >Начать заново</div>
                                                     </div>
                                                 </div>
                                             </motion.div>
