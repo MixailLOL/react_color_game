@@ -440,7 +440,7 @@ function good_answer_anim(){
         defaults: { ease: ("custom", "M0,0 C0,0 0.507,-0.008 0.742,0.226 1.005,0.489 1,1 1,1 ") }
     });
     let points = this.state.points_count + 1;
-    let time = Number(this.state.timer_s_left + 5);
+    let time = Number(this.state.timer_s_left + 20);
 
     timeline
     .to(otli4no,{scale: 1.5, duration:0.8})
