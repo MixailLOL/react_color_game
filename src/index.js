@@ -752,7 +752,7 @@ class Game extends React.Component {
             expand_block(this.state.true_color);
         }
         else if(presed_color == 'points_up'){
-            this.state.timer_max_time = Number(5 + Math.round(this.state.timer_s_left));
+            this.state.timer_max_time = Number(20 + Math.round(this.state.timer_s_left));
             this.setState({game_state: 'points_up'});
         }
         else if (presed_color == "No answer"){ 
